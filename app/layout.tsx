@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Navigation from '@/components/Navigation';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 export const metadata: Metadata = {
   title: 'きゅうしょくなにかな',
@@ -28,6 +29,7 @@ export default function RootLayout({
         )}
       </head>
       <body className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100">
+        <GoogleAnalytics />
         <Navigation />
         <main className="min-h-screen pb-8">{children}</main>
         <footer className="bg-white border-t border-gray-200 py-6 mt-8">
