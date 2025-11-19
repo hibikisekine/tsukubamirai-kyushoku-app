@@ -54,7 +54,14 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
   const prevMonth = new Date(year, month - 1, 1);
   const nextMonth = new Date(year, month + 1, 1);
   
-  const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
+  // 平日のみ表示（月〜金）
+  const weekDays = ['月', '火', '水', '木', '金'];
+  
+  // 平日のみの日付をフィルタリング
+  const weekdayCalendarDays = calendarDays.filter((day) => {
+    const dayOfWeek = day.getDay();
+    return dayOfWeek >= 1 && dayOfWeek <= 5; // 月曜日(1)〜金曜日(5)
+  });
   
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -113,65 +120,46 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
       <AdBanner />
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <div className="grid grid-cols-7 gap-2">
-          {/* 曜日ヘッダー */}
+        <div className="grid grid-cols-5 gap-2 sm:gap-3">
+          {/* 曜日ヘッダー（平日のみ） */}
           {weekDays.map((day) => (
             <div
               key={day}
-              className={`text-center font-semibold py-2 ${
-                day === '日' ? 'text-red-600' : day === '土' ? 'text-blue-600' : 'text-gray-700'
-              }`}
+              className="text-center font-semibold py-2 text-gray-700"
             >
               {day}
             </div>
           ))}
           
-          {/* カレンダーの日付 */}
-          {calendarDays.map((day) => {
+          {/* カレンダーの日付（平日のみ） */}
+          {weekdayCalendarDays.map((day) => {
             const dayStr = format(day, 'yyyy-MM-dd');
             const kondate = kondateMap.get(dayStr);
             const isCurrentMonth = isSameMonth(day, targetDate);
             const isToday = isSameDay(day, today);
-            const isWeekend = day.getDay() === 0 || day.getDay() === 6;
             
             return (
               <div
                 key={dayStr}
-                className={`min-h-[80px] sm:min-h-[100px] border rounded-lg p-1 sm:p-2 ${
+                className={`min-h-[100px] sm:min-h-[120px] border rounded-lg p-2 sm:p-3 ${
                   !isCurrentMonth ? 'bg-gray-50 opacity-50' : 'bg-white'
-                } ${isToday ? 'ring-2 ring-primary-500' : ''} ${
-                  isWeekend ? 'bg-orange-50' : ''
-                }`}
+                } ${isToday ? 'ring-2 ring-primary-500' : ''}`}
               >
                 <div className="flex flex-col h-full">
-                  <div
-                    className={`text-sm font-semibold mb-1 ${
-                      day.getDay() === 0
-                        ? 'text-red-600'
-                        : day.getDay() === 6
-                        ? 'text-blue-600'
-                        : 'text-gray-700'
-                    }`}
-                  >
+                  <div className="text-sm font-semibold mb-2 text-gray-700">
                     {format(day, 'd')}
                   </div>
                   {kondate && isCurrentMonth ? (
                     <Link
                       href={`/${dayStr}?type=${selectedType}`}
-                      className="flex-1 text-[10px] sm:text-xs text-gray-700 hover:text-primary-600 transition-colors line-clamp-2 sm:line-clamp-3"
+                      className="flex-1 text-xs sm:text-sm text-gray-700 hover:text-primary-600 transition-colors line-clamp-3 sm:line-clamp-4"
                       title={kondate.menu}
                     >
-                      <span className="hidden sm:inline">
-                        {kondate.menu.split(',').slice(0, 2).join(', ')}
-                        {kondate.menu.split(',').length > 2 && '...'}
-                      </span>
-                      <span className="sm:hidden">
-                        {kondate.menu.split(',')[0]}
-                        {kondate.menu.split(',').length > 1 && '...'}
-                      </span>
+                      {kondate.menu.split(',').slice(0, 3).join(', ')}
+                      {kondate.menu.split(',').length > 3 && '...'}
                     </Link>
                   ) : isCurrentMonth ? (
-                    <div className="flex-1 text-[10px] sm:text-xs text-gray-400">-</div>
+                    <div className="flex-1 text-xs sm:text-sm text-gray-400">-</div>
                   ) : null}
                 </div>
               </div>
@@ -187,10 +175,6 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 border-2 border-primary-500 rounded"></div>
             <span>今日</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-orange-50 rounded"></div>
-            <span>週末</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-gray-50 rounded"></div>
