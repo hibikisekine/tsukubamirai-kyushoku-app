@@ -4,6 +4,7 @@ import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 import AffiliateLink from '@/components/AffiliateLink';
+import LikeButton from '@/components/LikeButton';
 import { getKondateByDateBoth, KondateType } from '@/lib/data';
 
 // 動的レンダリングを強制（データが更新されたら即座に反映）
@@ -82,13 +83,16 @@ export default async function DatePage({ params, searchParams }: PageProps) {
       {kondate ? (
         <>
           <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-            <div className="flex items-center gap-2 mb-4">
-              <h2 className="text-xl font-semibold text-gray-800">
-                {selectedType}献立
-              </h2>
-              <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold">
-                {kondate.weekday}
-              </span>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  {selectedType}献立
+                </h2>
+                <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold">
+                  {kondate.weekday}
+                </span>
+              </div>
+              <LikeButton date={date} type={selectedType} />
             </div>
             <div className="prose max-w-none">
               <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-line">
@@ -165,11 +169,32 @@ export default async function DatePage({ params, searchParams }: PageProps) {
           <div className="flex flex-wrap gap-2">
             <AffiliateLink
               href="https://amzn.to/44d5r5t"
-              title="給食関連商品"
+              title="Amazonで給食関連商品"
               className="inline-block px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-semibold no-underline"
             >
-              🛒 給食関連商品を見る
+              🛒 Amazonで見る
             </AffiliateLink>
+            {/* A8.netの商品リンク */}
+            {/* 環境変数 NEXT_PUBLIC_A8_AFFILIATE_ID が設定されていれば、通常のURLでも自動変換されます */}
+            {/* A8.netで商品リンクを生成したら、以下のコメントを外してURLを追加してください */}
+            {/* 
+            <AffiliateLink
+              href="https://www.muji.com/jp/ja/store/cmdty/detail/商品番号"
+              affiliateType="a8"
+              title="ランチボックス"
+              className="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold no-underline"
+            >
+              🍱 ランチボックスを見る
+            </AffiliateLink>
+            <AffiliateLink
+              href="https://www.thermos.jp/products/商品番号"
+              affiliateType="a8"
+              title="水筒"
+              className="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold no-underline"
+            >
+              💧 水筒を見る
+            </AffiliateLink>
+            */}
           </div>
         </div>
       </div>

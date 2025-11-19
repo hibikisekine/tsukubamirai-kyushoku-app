@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
+import LikeButton from '@/components/LikeButton';
 import { getKondateList } from '@/lib/data';
 import TypeSelector from '@/components/TypeSelector';
 
@@ -60,35 +61,42 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               const isToday = format(kondateDate, 'yyyy-MM-dd') === todayStr;
               
               return (
-                <Link
+                <div
                   key={`${kondate.date}-${kondate.type}`}
-                  href={`/${format(kondateDate, 'yyyy-MM-dd')}?type=${kondate.type}`}
                   className={`kondate-card ${isToday ? 'ring-2 ring-primary-500' : ''}`}
                 >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-lg font-semibold text-gray-800">
-                          {format(kondateDate, 'M月d日', { locale: ja })}
-                        </span>
-                        <span className="text-sm text-gray-600">
-                          ({kondate.weekday})
-                        </span>
-                        <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded font-semibold">
-                          {kondate.type}献立
-                        </span>
-                        {isToday && (
-                          <span className="px-2 py-1 bg-primary-500 text-white text-xs rounded">
-                            今日
+                  <div className="flex justify-between items-start gap-4">
+                    <Link
+                      href={`/${format(kondateDate, 'yyyy-MM-dd')}?type=${kondate.type}`}
+                      className="flex-1"
+                    >
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-lg font-semibold text-gray-800">
+                            {format(kondateDate, 'M月d日', { locale: ja })}
                           </span>
-                        )}
+                          <span className="text-sm text-gray-600">
+                            ({kondate.weekday})
+                          </span>
+                          <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded font-semibold">
+                            {kondate.type}献立
+                          </span>
+                          {isToday && (
+                            <span className="px-2 py-1 bg-primary-500 text-white text-xs rounded">
+                              今日
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-gray-700 leading-relaxed">
+                          {kondate.menu}
+                        </p>
                       </div>
-                      <p className="text-gray-700 leading-relaxed">
-                        {kondate.menu}
-                      </p>
+                    </Link>
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <LikeButton date={kondate.date} type={kondate.type} />
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             })
           ) : (
@@ -118,4 +126,5 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     </div>
   );
 }
+
 
