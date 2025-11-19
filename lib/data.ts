@@ -34,17 +34,28 @@ function ensureDataFile() {
 export async function getKondateList(): Promise<Kondate[]> {
   // Supabaseが利用可能な場合はSupabaseから取得
   if (isSupabaseAvailable()) {
-    return await getKondateListFromSupabase();
+    try {
+      const data = await getKondateListFromSupabase();
+      console.log(`[getKondateList] Supabaseから ${data.length} 件のデータを取得`);
+      return data;
+    } catch (error) {
+      console.error('[getKondateList] Supabaseからの取得エラー:', error);
+      // エラーが発生しても空配列を返す（フォールバックしない）
+      return [];
+    }
   }
 
+  console.log('[getKondateList] Supabaseが利用不可、ファイルシステムから取得');
   // フォールバック: ファイルシステムから取得
   ensureDataFile();
   try {
     const fileContent = fs.readFileSync(dataFilePath, 'utf-8');
     const data = JSON.parse(fileContent);
-    return Array.isArray(data) ? data : [];
+    const result = Array.isArray(data) ? data : [];
+    console.log(`[getKondateList] ファイルシステムから ${result.length} 件のデータを取得`);
+    return result;
   } catch (error) {
-    console.error('Error reading kondate data:', error);
+    console.error('[getKondateList] ファイルシステムからの取得エラー:', error);
     return [];
   }
 }
