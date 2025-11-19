@@ -3,7 +3,7 @@ import './globals.css';
 import Navigation from '@/components/Navigation';
 
 export const metadata: Metadata = {
-  title: 'つくばみらい市給食献立',
+  title: 'きゅうしょくなにかな',
   description: 'つくばみらい市の給食献立を確認できるアプリ',
   manifest: '/manifest.json',
   themeColor: '#f97316',
@@ -32,7 +32,7 @@ export default function RootLayout({
         <main className="min-h-screen pb-8">{children}</main>
         <footer className="bg-white border-t border-gray-200 py-6 mt-8">
           <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
-            <p>© 2024 つくばみらい市給食献立アプリ</p>
+            <p>© 2024 きゅうしょくなにかな</p>
             <div className="flex justify-center gap-4 mt-2">
               <a
                 href="/about"

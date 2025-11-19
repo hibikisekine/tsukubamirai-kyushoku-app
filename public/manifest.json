@@ -1,6 +1,6 @@
 {
-  "name": "つくばみらい市給食献立",
-  "short_name": "給食献立",
+  "name": "きゅうしょくなにかな",
+  "short_name": "きゅうしょくなにかな",
   "description": "つくばみらい市の給食献立を確認できるアプリ",
   "start_url": "/",
   "display": "standalone",

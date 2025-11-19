@@ -27,7 +27,7 @@ export default async function HomePage() {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <header className="text-center mb-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-primary-600 mb-2">
-          🍽️ つくばみらい市給食献立
+          🍽️ きゅうしょくなにかな
         </h1>
         <p className="text-gray-600">
           {format(today, 'yyyy年M月d日(E)', { locale: ja })}

@@ -30,13 +30,15 @@ export default function AdBanner({ position = 'top', className = '' }: AdBannerP
     );
   }
 
+  const adSlotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID || "1234567890";
+
   return (
     <div className={`ad-container ${className}`}>
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
         data-ad-client={process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}
-        data-ad-slot="1234567890" // 実際のAdSense広告ユニットIDに置き換え
+        data-ad-slot={adSlotId}
         data-ad-format="auto"
         data-full-width-responsive="true"
       />
