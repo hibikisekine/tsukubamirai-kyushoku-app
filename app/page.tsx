@@ -16,39 +16,59 @@ interface HomePageProps {
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const today = new Date();
-  const todayStr = format(today, 'yyyy-MM-dd');
-  const selectedType = (searchParams.type?.toUpperCase() || 'A') as 'A' | 'B';
-  
-  // 今週の献立を取得（選択されたタイプのみ、重複を避ける）
+  let today: Date;
+  let todayStr: string;
+  let selectedType: 'A' | 'B';
   let kondateList: Kondate[] = [];
+  let thisWeekKondate: Kondate[] = [];
+
   try {
-    kondateList = await getKondateList();
+    today = new Date();
+    todayStr = format(today, 'yyyy-MM-dd');
+    selectedType = (searchParams.type?.toUpperCase() || 'A') as 'A' | 'B';
+    
+    // 今週の献立を取得（選択されたタイプのみ、重複を避ける）
+    try {
+      kondateList = await getKondateList();
+    } catch (error) {
+      console.error('Error fetching kondate list:', error);
+      kondateList = [];
+    }
+    
+    thisWeekKondate = kondateList
+      .filter((k) => {
+        if (!k || !k.date || !k.type) return false;
+        try {
+          const kondateDate = new Date(k.date);
+          if (isNaN(kondateDate.getTime())) return false;
+          const weekAgo = new Date(today);
+          weekAgo.setDate(weekAgo.getDate() - 7);
+          return kondateDate >= weekAgo && kondateDate <= today && k.type === selectedType;
+        } catch (error) {
+          console.error('Error filtering kondate:', error);
+          return false;
+        }
+      })
+      .sort((a, b) => {
+        try {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) return 0;
+          return dateA.getTime() - dateB.getTime();
+        } catch (error) {
+          return 0;
+        }
+      })
+      .slice(0, 7);
   } catch (error) {
-    console.error('Error fetching kondate list:', error);
+    console.error('Critical error in HomePage:', error);
+    // エラーが発生してもデフォルト値を設定
+    today = new Date();
+    todayStr = format(today, 'yyyy-MM-dd');
+    selectedType = 'A';
     kondateList = [];
+    thisWeekKondate = [];
   }
-  
-  const thisWeekKondate = kondateList
-    .filter((k) => {
-      try {
-        const kondateDate = new Date(k.date);
-        const weekAgo = new Date(today);
-        weekAgo.setDate(weekAgo.getDate() - 7);
-        return kondateDate >= weekAgo && kondateDate <= today && k.type === selectedType;
-      } catch (error) {
-        console.error('Error filtering kondate:', error);
-        return false;
-      }
-    })
-    .sort((a, b) => {
-      try {
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      } catch (error) {
-        return 0;
-      }
-    })
-    .slice(0, 7);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
