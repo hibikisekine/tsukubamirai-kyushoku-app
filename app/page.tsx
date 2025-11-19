@@ -1,10 +1,16 @@
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
+import dynamicImport from 'next/dynamic';
 import AdBanner from '@/components/AdBanner';
-import LikeButton from '@/components/LikeButton';
 import { getKondateList, Kondate } from '@/lib/data';
 import TypeSelector from '@/components/TypeSelector';
+
+// LikeButtonを動的インポート（SSRを無効化）
+const LikeButton = dynamicImport(() => import('@/components/LikeButton'), {
+  ssr: false,
+  loading: () => <div className="w-24 h-10 bg-gray-200 rounded-lg animate-pulse" />
+});
 
 // 動的レンダリングを強制（データが更新されたら即座に反映）
 export const dynamic = 'force-dynamic';
