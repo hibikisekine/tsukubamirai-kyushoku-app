@@ -136,12 +136,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                           </p>
                         </div>
                       </Link>
-                      {/* 一時的にLikeButtonを無効化してエラーを確認 */}
-                      {/* {kondate.date && kondate.type && (
+                      {kondate.date && kondate.type && (
                         <div onClick={(e) => e.stopPropagation()}>
                           <LikeButton date={kondate.date} type={kondate.type} />
                         </div>
-                      )} */}
+                      )}
                     </div>
                   </div>
                 );
