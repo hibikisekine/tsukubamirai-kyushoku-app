@@ -153,28 +153,24 @@ export default async function DatePage({ params, searchParams }: PageProps) {
         </div>
       )}
 
-      {/* アフィリエイトリンクセクション（例） */}
+      {/* アフィリエイトリンクセクション */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4 text-gray-800">
           🛒 給食関連商品
         </h2>
-        <div className="space-y-2 text-sm">
-          <p>
-            <AffiliateLink
-              href="https://www.amazon.co.jp/s?k=ランチボックス"
-              title="ランチボックス"
-            >
-              ランチボックス
-            </AffiliateLink>
-            や
-            <AffiliateLink
-              href="https://www.amazon.co.jp/s?k=水筒"
-              title="水筒"
-            >
-              水筒
-            </AffiliateLink>
-            など、給食に便利なアイテムをチェック！
+        <div className="space-y-3 text-sm">
+          <p className="text-gray-700">
+            ランチボックスや水筒など、給食に便利なアイテムをチェック！
           </p>
+          <div className="flex flex-wrap gap-2">
+            <AffiliateLink
+              href="https://amzn.to/44d5r5t"
+              title="給食関連商品"
+              className="inline-block px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-semibold no-underline"
+            >
+              🛒 給食関連商品を見る
+            </AffiliateLink>
+          </div>
         </div>
       </div>
 
