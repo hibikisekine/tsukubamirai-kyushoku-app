@@ -2,12 +2,8 @@ import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import dynamicImport from 'next/dynamic';
+import AdBanner from '@/components/AdBanner';
 import { getKondateList, Kondate } from '@/lib/data';
-
-// クライアントコンポーネントを動的インポート（SSRを無効化）
-const AdBanner = dynamicImport(() => import('@/components/AdBanner'), {
-  ssr: false,
-});
 
 // const TypeSelector = dynamicImport(() => import('@/components/TypeSelector'), {
 //   ssr: false,
