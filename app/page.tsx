@@ -2,15 +2,23 @@ import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import dynamicImport from 'next/dynamic';
-import AdBanner from '@/components/AdBanner';
 import { getKondateList, Kondate } from '@/lib/data';
-import TypeSelector from '@/components/TypeSelector';
 
-// LikeButtonを動的インポート（SSRを無効化）
-const LikeButton = dynamicImport(() => import('@/components/LikeButton'), {
+// クライアントコンポーネントを動的インポート（SSRを無効化）
+const AdBanner = dynamicImport(() => import('@/components/AdBanner'), {
   ssr: false,
-  loading: () => <div className="w-24 h-10 bg-gray-200 rounded-lg animate-pulse" />
 });
+
+const TypeSelector = dynamicImport(() => import('@/components/TypeSelector'), {
+  ssr: false,
+  loading: () => <div className="flex gap-2"><div className="w-20 h-10 bg-gray-200 rounded-lg animate-pulse" /><div className="w-20 h-10 bg-gray-200 rounded-lg animate-pulse" /></div>
+});
+
+// LikeButtonを一時的に完全に無効化
+// const LikeButton = dynamicImport(() => import('@/components/LikeButton'), {
+//   ssr: false,
+//   loading: () => <div className="w-24 h-10 bg-gray-200 rounded-lg animate-pulse" />
+// });
 
 // 動的レンダリングを強制（データが更新されたら即座に反映）
 export const dynamic = 'force-dynamic';
@@ -142,11 +150,12 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                           </p>
                         </div>
                       </Link>
-                      {kondate.date && kondate.type && (
+                      {/* LikeButtonを一時的に完全に無効化 */}
+                      {/* {kondate.date && kondate.type && (
                         <div onClick={(e) => e.stopPropagation()}>
                           <LikeButton date={kondate.date} type={kondate.type} />
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 );
