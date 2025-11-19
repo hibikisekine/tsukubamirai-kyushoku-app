@@ -4,10 +4,10 @@ import Link from 'next/link';
 import dynamicImport from 'next/dynamic';
 import { getKondateList, Kondate } from '@/lib/data';
 
-// クライアントコンポーネントを一時的に完全に無効化
-// const AdBanner = dynamicImport(() => import('@/components/AdBanner'), {
-//   ssr: false,
-// });
+// クライアントコンポーネントを動的インポート（SSRを無効化）
+const AdBanner = dynamicImport(() => import('@/components/AdBanner'), {
+  ssr: false,
+});
 
 // const TypeSelector = dynamicImport(() => import('@/components/TypeSelector'), {
 //   ssr: false,
@@ -116,8 +116,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </p>
       </header>
 
-      {/* AdBannerを一時的に無効化 */}
-      {/* <AdBanner /> */}
+      <AdBanner />
 
       {/* A/B献立の選択 */}
       {/* <div className="mb-6 flex justify-center">
@@ -230,7 +229,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </Link>
       </section>
 
-      {/* <AdBanner position="bottom" /> */}
+      <AdBanner position="bottom" />
     </div>
   );
 }
