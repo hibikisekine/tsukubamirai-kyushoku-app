@@ -42,3 +42,19 @@ body {
   overflow: hidden;
 }
 
+/* タイトルの改行防止 */
+.nav-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* モバイルでのタイトル調整 */
+@media (max-width: 640px) {
+  .nav-title {
+    font-size: 0.875rem;
+    max-width: 120px;
+  }
+}
+
