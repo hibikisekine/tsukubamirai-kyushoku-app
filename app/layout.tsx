@@ -33,12 +33,19 @@ export default function RootLayout({
         <footer className="bg-white border-t border-gray-200 py-6 mt-8">
           <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
             <p>© 2024 きゅうしょくなにかな</p>
-            <div className="flex justify-center gap-4 mt-2">
+            <div className="flex justify-center gap-4 mt-2 flex-wrap">
               <a
                 href="/about"
                 className="text-primary-600 hover:text-primary-700"
               >
                 このアプリについて
+              </a>
+              <span>|</span>
+              <a
+                href="/privacy"
+                className="text-primary-600 hover:text-primary-700"
+              >
+                プライバシーポリシー
               </a>
               <span>|</span>
               <a

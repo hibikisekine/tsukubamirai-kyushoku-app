@@ -80,7 +80,8 @@ export default function SearchPage() {
         </p>
       </header>
 
-      <AdBanner />
+      {/* 検索結果がある場合のみ広告を表示 */}
+      {(searchQuery && results.length > 0) && <AdBanner />}
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <div className="flex gap-4">
@@ -151,7 +152,8 @@ export default function SearchPage() {
         )}
       </div>
 
-      <AdBanner position="bottom" />
+      {/* 検索結果がある場合のみ広告を表示 */}
+      {(searchQuery && results.length > 0) && <AdBanner position="bottom" />}
     </div>
   );
 }
