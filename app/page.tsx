@@ -2,8 +2,7 @@ import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import dynamicImport from 'next/dynamic';
-// import { getKondateList, Kondate } from '@/lib/data';
-import type { Kondate } from '@/lib/data';
+import { getKondateList, Kondate } from '@/lib/data';
 
 // クライアントコンポーネントを一時的に完全に無効化
 // const AdBanner = dynamicImport(() => import('@/components/AdBanner'), {
@@ -43,14 +42,13 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     todayStr = format(today, 'yyyy-MM-dd');
     selectedType = (searchParams.type?.toUpperCase() || 'A') as 'A' | 'B';
     
-    // 一時的にgetKondateList()を無効化してエラーを確認
-    // try {
-    //   kondateList = await getKondateList();
-    // } catch (error) {
-    //   console.error('Error fetching kondate list:', error);
-    //   kondateList = [];
-    // }
-    kondateList = [];
+    // 今週の献立を取得（選択されたタイプのみ、重複を避ける）
+    try {
+      kondateList = await getKondateList();
+    } catch (error) {
+      console.error('Error fetching kondate list:', error);
+      kondateList = [];
+    }
     
     thisWeekKondate = kondateList
       .filter((k) => {
