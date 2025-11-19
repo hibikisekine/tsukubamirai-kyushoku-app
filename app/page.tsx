@@ -3,7 +3,7 @@ import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 import LikeButton from '@/components/LikeButton';
-import { getKondateList } from '@/lib/data';
+import { getKondateList, Kondate } from '@/lib/data';
 import TypeSelector from '@/components/TypeSelector';
 
 // 動的レンダリングを強制（データが更新されたら即座に反映）
@@ -21,15 +21,33 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const selectedType = (searchParams.type?.toUpperCase() || 'A') as 'A' | 'B';
   
   // 今週の献立を取得（選択されたタイプのみ、重複を避ける）
-  const kondateList = await getKondateList();
+  let kondateList: Kondate[] = [];
+  try {
+    kondateList = await getKondateList();
+  } catch (error) {
+    console.error('Error fetching kondate list:', error);
+    kondateList = [];
+  }
+  
   const thisWeekKondate = kondateList
     .filter((k) => {
-      const kondateDate = new Date(k.date);
-      const weekAgo = new Date(today);
-      weekAgo.setDate(weekAgo.getDate() - 7);
-      return kondateDate >= weekAgo && kondateDate <= today && k.type === selectedType;
+      try {
+        const kondateDate = new Date(k.date);
+        const weekAgo = new Date(today);
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        return kondateDate >= weekAgo && kondateDate <= today && k.type === selectedType;
+      } catch (error) {
+        console.error('Error filtering kondate:', error);
+        return false;
+      }
     })
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .sort((a, b) => {
+      try {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      } catch (error) {
+        return 0;
+      }
+    })
     .slice(0, 7);
 
   return (

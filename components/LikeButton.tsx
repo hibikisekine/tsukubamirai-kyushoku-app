@@ -15,6 +15,7 @@ export default function LikeButton({ date, type }: LikeButtonProps) {
   // 初期カウントを取得
   useEffect(() => {
     fetchCount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, type]);
 
   const fetchCount = async () => {
@@ -22,10 +23,15 @@ export default function LikeButton({ date, type }: LikeButtonProps) {
       const response = await fetch(`/api/likes?date=${date}&type=${type}`);
       if (response.ok) {
         const data = await response.json();
-        setCount(data.count);
+        setCount(data.count || 0);
+      } else {
+        // エラーの場合は0を設定
+        setCount(0);
       }
     } catch (error) {
       console.error('Error fetching likes:', error);
+      // エラーの場合は0を設定
+      setCount(0);
     }
   };
 

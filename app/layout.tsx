@@ -30,13 +30,15 @@ export default function RootLayout({
         {/* A8.netリンクマネージャー（環境変数から取得） */}
         {process.env.NEXT_PUBLIC_A8_CONFIG_ID && (
           <>
-            <script src="//statics.a8.net/a8link/a8linkmgr.js"></script>
+            <script src="https://statics.a8.net/a8link/a8linkmgr.js"></script>
             <script
               dangerouslySetInnerHTML={{
                 __html: `
-                  a8linkmgr({
-                    "config_id": "${process.env.NEXT_PUBLIC_A8_CONFIG_ID}"
-                  });
+                  if (typeof a8linkmgr !== 'undefined') {
+                    a8linkmgr({
+                      "config_id": "${process.env.NEXT_PUBLIC_A8_CONFIG_ID}"
+                    });
+                  }
                 `,
               }}
             />
