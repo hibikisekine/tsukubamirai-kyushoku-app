@@ -53,8 +53,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     // 日付のみで比較するため、時刻を0:00:00に設定
     const todayStart = new Date(today);
     todayStart.setHours(0, 0, 0, 0);
-    const weekAgoStart = new Date(todayStart);
-    weekAgoStart.setDate(weekAgoStart.getDate() - 7);
+    const tomorrowStart = new Date(todayStart);
+    tomorrowStart.setDate(tomorrowStart.getDate() + 1);
     
     thisWeekKondate = kondateList
       .filter((k) => {
@@ -69,8 +69,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           if (isNaN(kondateDate.getTime())) return false;
           kondateDate.setHours(0, 0, 0, 0);
           
-          // 7日前から今日まで（今日を含む）
-          return kondateDate >= weekAgoStart && kondateDate <= todayStart && k.type === selectedType;
+          // 今日と明日のみを表示
+          return kondateDate >= todayStart && kondateDate <= tomorrowStart && k.type === selectedType;
         } catch (error) {
           console.error('Error filtering kondate:', error);
           return false;
@@ -140,7 +140,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-          今週の献立
+          今日と明日の献立
         </h2>
         <div className="grid gap-4">
           {thisWeekKondate.length > 0 ? (
@@ -201,7 +201,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             }).filter(Boolean)
           ) : (
             <div className="kondate-card text-center text-gray-500">
-              <p>今週の献立データがありません</p>
+              <p>今日と明日の献立データがありません</p>
             </div>
           )}
         </div>
