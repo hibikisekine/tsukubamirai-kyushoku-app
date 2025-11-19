@@ -27,6 +27,21 @@ export default function RootLayout({
             crossOrigin="anonymous"
           />
         )}
+        {/* A8.netリンクマネージャー（環境変数から取得） */}
+        {process.env.NEXT_PUBLIC_A8_CONFIG_ID && (
+          <>
+            <script src="//statics.a8.net/a8link/a8linkmgr.js"></script>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  a8linkmgr({
+                    "config_id": "${process.env.NEXT_PUBLIC_A8_CONFIG_ID}"
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
       </head>
       <body className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100">
         <GoogleAnalytics />
