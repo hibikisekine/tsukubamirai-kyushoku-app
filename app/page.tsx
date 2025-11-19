@@ -8,6 +8,7 @@ import TypeSelector from '@/components/TypeSelector';
 
 // 動的レンダリングを強制（データが更新されたら即座に反映）
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 interface HomePageProps {
   searchParams: {
@@ -95,48 +96,60 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <div className="grid gap-4">
           {thisWeekKondate.length > 0 ? (
             thisWeekKondate.map((kondate) => {
-              const kondateDate = new Date(kondate.date);
-              const isToday = format(kondateDate, 'yyyy-MM-dd') === todayStr;
-              
-              return (
-                <div
-                  key={`${kondate.date}-${kondate.type}`}
-                  className={`kondate-card ${isToday ? 'ring-2 ring-primary-500' : ''}`}
-                >
-                  <div className="flex justify-between items-start gap-4">
-                    <Link
-                      href={`/${format(kondateDate, 'yyyy-MM-dd')}?type=${kondate.type}`}
-                      className="flex-1"
-                    >
-                      <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-lg font-semibold text-gray-800">
-                            {format(kondateDate, 'M月d日', { locale: ja })}
-                          </span>
-                          <span className="text-sm text-gray-600">
-                            ({kondate.weekday})
-                          </span>
-                          <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded font-semibold">
-                            {kondate.type}献立
-                          </span>
-                          {isToday && (
-                            <span className="px-2 py-1 bg-primary-500 text-white text-xs rounded">
-                              今日
+              try {
+                if (!kondate.date) return null;
+                const kondateDate = new Date(kondate.date);
+                if (isNaN(kondateDate.getTime())) return null;
+                const isToday = format(kondateDate, 'yyyy-MM-dd') === todayStr;
+                
+                return (
+                  <div
+                    key={`${kondate.date}-${kondate.type}`}
+                    className={`kondate-card ${isToday ? 'ring-2 ring-primary-500' : ''}`}
+                  >
+                    <div className="flex justify-between items-start gap-4">
+                      <Link
+                        href={`/${format(kondateDate, 'yyyy-MM-dd')}?type=${kondate.type || 'A'}`}
+                        className="flex-1"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-lg font-semibold text-gray-800">
+                              {format(kondateDate, 'M月d日', { locale: ja })}
                             </span>
-                          )}
+                            {kondate.weekday && (
+                              <span className="text-sm text-gray-600">
+                                ({kondate.weekday})
+                              </span>
+                            )}
+                            <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded font-semibold">
+                              {kondate.type || 'A'}献立
+                            </span>
+                            {isToday && (
+                              <span className="px-2 py-1 bg-primary-500 text-white text-xs rounded">
+                                今日
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-gray-700 leading-relaxed">
+                            {kondate.menu || 'メニュー情報なし'}
+                          </p>
                         </div>
-                        <p className="text-gray-700 leading-relaxed">
-                          {kondate.menu}
-                        </p>
-                      </div>
-                    </Link>
-                    <div onClick={(e) => e.stopPropagation()}>
-                      <LikeButton date={kondate.date} type={kondate.type} />
+                      </Link>
+                      {/* 一時的にLikeButtonを無効化してエラーを確認 */}
+                      {/* {kondate.date && kondate.type && (
+                        <div onClick={(e) => e.stopPropagation()}>
+                          <LikeButton date={kondate.date} type={kondate.type} />
+                        </div>
+                      )} */}
                     </div>
                   </div>
-                </div>
-              );
-            })
+                );
+              } catch (error) {
+                console.error('Error rendering kondate card:', error, kondate);
+                return null;
+              }
+            }).filter(Boolean)
           ) : (
             <div className="kondate-card text-center text-gray-500">
               <p>今週の献立データがありません</p>
