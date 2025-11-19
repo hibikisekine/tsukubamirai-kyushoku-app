@@ -11,27 +11,38 @@ export default function LikeButton({ date, type }: LikeButtonProps) {
   const [count, setCount] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   // 初期カウントを取得
   useEffect(() => {
-    fetchCount();
+    if (date && type) {
+      fetchCount();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, type]);
 
   const fetchCount = async () => {
+    if (!date || !type) {
+      setCount(0);
+      return;
+    }
+    
     try {
       const response = await fetch(`/api/likes?date=${date}&type=${type}`);
       if (response.ok) {
         const data = await response.json();
         setCount(data.count || 0);
+        setHasError(false);
       } else {
-        // エラーの場合は0を設定
+        // エラーの場合は0を設定（エラーを表示しない）
         setCount(0);
+        setHasError(false);
       }
     } catch (error) {
       console.error('Error fetching likes:', error);
-      // エラーの場合は0を設定
+      // エラーの場合は0を設定（エラーを表示しない）
       setCount(0);
+      setHasError(false);
     }
   };
 

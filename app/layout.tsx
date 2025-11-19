@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Navigation from '@/components/Navigation';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import A8LinkManager from '@/components/A8LinkManager';
 
 export const metadata: Metadata = {
   title: 'きゅうしょくなにかな',
@@ -27,26 +28,10 @@ export default function RootLayout({
             crossOrigin="anonymous"
           />
         )}
-        {/* A8.netリンクマネージャー（環境変数から取得） */}
-        {process.env.NEXT_PUBLIC_A8_CONFIG_ID && (
-          <>
-            <script src="https://statics.a8.net/a8link/a8linkmgr.js"></script>
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  if (typeof a8linkmgr !== 'undefined') {
-                    a8linkmgr({
-                      "config_id": "${process.env.NEXT_PUBLIC_A8_CONFIG_ID}"
-                    });
-                  }
-                `,
-              }}
-            />
-          </>
-        )}
       </head>
       <body className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100">
         <GoogleAnalytics />
+        <A8LinkManager />
         <Navigation />
         <main className="min-h-screen pb-8">{children}</main>
         <footer className="bg-white border-t border-gray-200 py-6 mt-8">
