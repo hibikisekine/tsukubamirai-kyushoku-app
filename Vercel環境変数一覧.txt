@@ -1,0 +1,24 @@
+Vercel環境変数設定一覧
+====================
+
+以下の環境変数をVercelのプロジェクト設定で追加してください。
+
+1. NEXT_PUBLIC_SUPABASE_URL
+   https://ygvgnbdwxhfepphnligk.supabase.co
+
+2. NEXT_PUBLIC_SUPABASE_ANON_KEY
+   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndmduYmR3eGhmZXBwaG5saWdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyOTg5NDEsImV4cCI6MjA3ODg3NDk0MX0.OcoSA7C1Y86yHHjgNJj8aZFVRjzdXAUgIWf2wMtGbW0
+
+3. SUPABASE_SERVICE_ROLE_KEY
+   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndmduYmR3eGhmZXBwaG5saWdrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzI5ODk0MSwiZXhwIjoyMDc4ODc0OTQxfQ.QWWrpIe5DF4DkEl-F_Kz6ZkxedODt7J08IcOLFFbR24
+
+4. ADMIN_PASSWORD
+   （強力なパスワードを設定してください）
+
+設定方法：
+1. Vercelダッシュボードでプロジェクトを開く
+2. 「Settings」→「Environment Variables」
+3. 上記の4つを1つずつ追加
+4. すべての環境（Production, Preview, Development）にチェック
+5. 「Save」をクリック
+

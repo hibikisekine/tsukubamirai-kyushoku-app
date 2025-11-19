@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { getKondateList } from '@/lib/data';
 import AdBanner from '@/components/AdBanner';
 
+// 動的レンダリングを強制（データが更新されたら即座に反映）
+export const dynamic = 'force-dynamic';
+
 interface CalendarPageProps {
   searchParams: {
     year?: string;

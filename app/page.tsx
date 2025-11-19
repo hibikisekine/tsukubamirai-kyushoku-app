@@ -4,6 +4,9 @@ import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 import { getKondateList } from '@/lib/data';
 
+// 動的レンダリングを強制（データが更新されたら即座に反映）
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const today = new Date();
   const todayStr = format(today, 'yyyy-MM-dd');
