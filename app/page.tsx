@@ -3,22 +3,30 @@ import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 import { getKondateList } from '@/lib/data';
+import TypeSelector from '@/components/TypeSelector';
 
 // 動的レンダリングを強制（データが更新されたら即座に反映）
 export const dynamic = 'force-dynamic';
 
-export default async function HomePage() {
+interface HomePageProps {
+  searchParams: {
+    type?: string;
+  };
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
   const today = new Date();
   const todayStr = format(today, 'yyyy-MM-dd');
+  const selectedType = (searchParams.type?.toUpperCase() || 'A') as 'A' | 'B';
   
-  // 今週の献立を取得（A献立のみ、重複を避ける）
+  // 今週の献立を取得（選択されたタイプのみ、重複を避ける）
   const kondateList = await getKondateList();
   const thisWeekKondate = kondateList
     .filter((k) => {
       const kondateDate = new Date(k.date);
       const weekAgo = new Date(today);
       weekAgo.setDate(weekAgo.getDate() - 7);
-      return kondateDate >= weekAgo && kondateDate <= today && k.type === 'A';
+      return kondateDate >= weekAgo && kondateDate <= today && k.type === selectedType;
     })
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .slice(0, 7);
@@ -35,6 +43,11 @@ export default async function HomePage() {
       </header>
 
       <AdBanner />
+
+      {/* A/B献立の選択 */}
+      <div className="mb-6 flex justify-center">
+        <TypeSelector currentType={selectedType} basePath="/" />
+      </div>
 
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">
