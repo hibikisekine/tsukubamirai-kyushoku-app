@@ -38,7 +38,12 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   let thisWeekKondate: Kondate[] = [];
 
   try {
-    today = new Date();
+    // JST（日本標準時）で今日の日付を取得
+    const now = new Date();
+    // UTC+9時間（JST）に調整
+    const jstOffset = 9 * 60; // 分単位
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    today = new Date(utc + (jstOffset * 60000));
     todayStr = format(today, 'yyyy-MM-dd');
     selectedType = (searchParams.type?.toUpperCase() || 'A') as 'A' | 'B';
     
@@ -89,8 +94,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       .slice(0, 7);
   } catch (error) {
     console.error('Critical error in HomePage:', error);
-    // エラーが発生してもデフォルト値を設定
-    today = new Date();
+    // エラーが発生してもデフォルト値を設定（JSTで）
+    const now = new Date();
+    const jstOffset = 9 * 60;
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    today = new Date(utc + (jstOffset * 60000));
     todayStr = format(today, 'yyyy-MM-dd');
     selectedType = 'A';
     kondateList = [];
