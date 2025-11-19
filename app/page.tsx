@@ -2,17 +2,18 @@ import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import dynamicImport from 'next/dynamic';
-import { getKondateList, Kondate } from '@/lib/data';
+// import { getKondateList, Kondate } from '@/lib/data';
+import type { Kondate } from '@/lib/data';
 
-// クライアントコンポーネントを動的インポート（SSRを無効化）
-const AdBanner = dynamicImport(() => import('@/components/AdBanner'), {
-  ssr: false,
-});
+// クライアントコンポーネントを一時的に完全に無効化
+// const AdBanner = dynamicImport(() => import('@/components/AdBanner'), {
+//   ssr: false,
+// });
 
-const TypeSelector = dynamicImport(() => import('@/components/TypeSelector'), {
-  ssr: false,
-  loading: () => <div className="flex gap-2"><div className="w-20 h-10 bg-gray-200 rounded-lg animate-pulse" /><div className="w-20 h-10 bg-gray-200 rounded-lg animate-pulse" /></div>
-});
+// const TypeSelector = dynamicImport(() => import('@/components/TypeSelector'), {
+//   ssr: false,
+//   loading: () => <div className="flex gap-2"><div className="w-20 h-10 bg-gray-200 rounded-lg animate-pulse" /><div className="w-20 h-10 bg-gray-200 rounded-lg animate-pulse" /></div>
+// });
 
 // LikeButtonを一時的に完全に無効化
 // const LikeButton = dynamicImport(() => import('@/components/LikeButton'), {
@@ -42,13 +43,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     todayStr = format(today, 'yyyy-MM-dd');
     selectedType = (searchParams.type?.toUpperCase() || 'A') as 'A' | 'B';
     
-    // 今週の献立を取得（選択されたタイプのみ、重複を避ける）
-    try {
-      kondateList = await getKondateList();
-    } catch (error) {
-      console.error('Error fetching kondate list:', error);
-      kondateList = [];
-    }
+    // 一時的にgetKondateList()を無効化してエラーを確認
+    // try {
+    //   kondateList = await getKondateList();
+    // } catch (error) {
+    //   console.error('Error fetching kondate list:', error);
+    //   kondateList = [];
+    // }
+    kondateList = [];
     
     thisWeekKondate = kondateList
       .filter((k) => {
@@ -96,11 +98,34 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </p>
       </header>
 
-      <AdBanner />
+      {/* AdBannerを一時的に無効化 */}
+      {/* <AdBanner /> */}
 
       {/* A/B献立の選択 */}
-      <div className="mb-6 flex justify-center">
+      {/* <div className="mb-6 flex justify-center">
         <TypeSelector currentType={selectedType} basePath="/" />
+      </div> */}
+      <div className="mb-6 flex justify-center gap-2">
+        <Link
+          href="/?type=A"
+          className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+            selectedType === 'A'
+              ? 'bg-primary-500 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          A献立
+        </Link>
+        <Link
+          href="/?type=B"
+          className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+            selectedType === 'B'
+              ? 'bg-primary-500 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          B献立
+        </Link>
       </div>
 
       <section className="mb-8">
@@ -187,7 +212,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </Link>
       </section>
 
-      <AdBanner position="bottom" />
+      {/* <AdBanner position="bottom" /> */}
     </div>
   );
 }
