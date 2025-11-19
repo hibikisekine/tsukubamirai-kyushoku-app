@@ -50,15 +50,27 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       kondateList = [];
     }
     
+    // 日付のみで比較するため、時刻を0:00:00に設定
+    const todayStart = new Date(today);
+    todayStart.setHours(0, 0, 0, 0);
+    const weekAgoStart = new Date(todayStart);
+    weekAgoStart.setDate(weekAgoStart.getDate() - 7);
+    
     thisWeekKondate = kondateList
       .filter((k) => {
         if (!k || !k.date || !k.type) return false;
         try {
-          const kondateDate = new Date(k.date);
+          // 日付文字列を直接比較（時刻を含めない）
+          const kondateDateStr = k.date;
+          if (!kondateDateStr || kondateDateStr.length < 10) return false;
+          
+          // 日付文字列をDateオブジェクトに変換（時刻を0:00:00に設定）
+          const kondateDate = new Date(kondateDateStr);
           if (isNaN(kondateDate.getTime())) return false;
-          const weekAgo = new Date(today);
-          weekAgo.setDate(weekAgo.getDate() - 7);
-          return kondateDate >= weekAgo && kondateDate <= today && k.type === selectedType;
+          kondateDate.setHours(0, 0, 0, 0);
+          
+          // 7日前から今日まで（今日を含む）
+          return kondateDate >= weekAgoStart && kondateDate <= todayStart && k.type === selectedType;
         } catch (error) {
           console.error('Error filtering kondate:', error);
           return false;
