@@ -1,12 +1,59 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Navigation from '@/components/Navigation';
-import GoogleAnalytics from '@/components/GoogleAnalytics';
-import A8LinkManager from '@/components/A8LinkManager';
 
 export const metadata: Metadata = {
-  title: 'きゅうしょくなにかな',
-  description: 'つくばみらい市の給食献立を確認できるアプリ',
+  title: {
+    default: 'きゅうしょくなにかな | つくばみらい市給食献立',
+    template: '%s | きゅうしょくなにかな',
+  },
+  description: 'つくばみらい市の学校給食献立を毎日確認できるアプリ。今日と明日の献立を簡単にチェックできます。',
+  keywords: ['給食', '献立', 'つくばみらい市', '学校給食', 'きゅうしょく', '給食メニュー', '茨城県'],
+  authors: [{ name: 'きゅうしょくなにかな' }],
+  creator: 'きゅうしょくなにかな',
+  publisher: 'きゅうしょくなにかな',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://kyushoku.site'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'ja_JP',
+    url: 'https://kyushoku.site',
+    siteName: 'きゅうしょくなにかな',
+    title: 'きゅうしょくなにかな | つくばみらい市給食献立',
+    description: 'つくばみらい市の学校給食献立を毎日確認できるアプリ。今日と明日の献立を簡単にチェックできます。',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'きゅうしょくなにかな',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'きゅうしょくなにかな | つくばみらい市給食献立',
+    description: 'つくばみらい市の学校給食献立を毎日確認できるアプリ。今日と明日の献立を簡単にチェックできます。',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   manifest: '/manifest.json',
   themeColor: '#f97316',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
@@ -30,26 +77,17 @@ export default function RootLayout({
         )}
       </head>
       <body className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100">
-        <GoogleAnalytics />
-        <A8LinkManager />
         <Navigation />
         <main className="min-h-screen pb-8">{children}</main>
         <footer className="bg-white border-t border-gray-200 py-6 mt-8">
           <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
-            <p>© 2024 きゅうしょくなにかな</p>
-            <div className="flex justify-center gap-4 mt-2 flex-wrap">
+            <p>© 2024 つくばみらい市給食献立アプリ</p>
+            <div className="flex justify-center gap-4 mt-2">
               <a
                 href="/about"
                 className="text-primary-600 hover:text-primary-700"
               >
                 このアプリについて
-              </a>
-              <span>|</span>
-              <a
-                href="/privacy"
-                className="text-primary-600 hover:text-primary-700"
-              >
-                プライバシーポリシー
               </a>
               <span>|</span>
               <a

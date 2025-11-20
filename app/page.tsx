@@ -2,8 +2,19 @@ import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import dynamicImport from 'next/dynamic';
+import type { Metadata } from 'next';
 import AdBanner from '@/components/AdBanner';
 import { getKondateList, Kondate } from '@/lib/data';
+
+export const metadata: Metadata = {
+  title: 'きゅうしょくなにかな',
+  description: 'つくばみらい市の学校給食献立を毎日確認できるアプリ。今日と明日の献立を簡単にチェックできます。',
+  openGraph: {
+    title: 'きゅうしょくなにかな | つくばみらい市給食献立',
+    description: 'つくばみらい市の学校給食献立を毎日確認できるアプリ。今日と明日の献立を簡単にチェックできます。',
+    type: 'website',
+  },
+};
 
 // const TypeSelector = dynamicImport(() => import('@/components/TypeSelector'), {
 //   ssr: false,
@@ -101,16 +112,37 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     thisWeekKondate = [];
   }
 
+  // 構造化データ（JSON-LD）
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'きゅうしょくなにかな',
+    description: 'つくばみらい市の学校給食献立を毎日確認できるアプリ',
+    url: 'https://kyushoku.site',
+    applicationCategory: 'FoodApplication',
+    operatingSystem: 'Web',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'JPY',
+    },
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <header className="text-center mb-8">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 mb-2 break-keep">
-          🍽️ きゅうしょくなにかな
-        </h1>
-        <p className="text-gray-600 text-sm sm:text-base">
-          {format(today, 'yyyy年M月d日(E)', { locale: ja })}
-        </p>
-      </header>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <header className="text-center mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 mb-2 break-keep">
+            🍽️ きゅうしょくなにかな
+          </h1>
+          <p className="text-gray-600 text-sm sm:text-base">
+            {format(today, 'yyyy年M月d日(E)', { locale: ja })}
+          </p>
+        </header>
 
       <AdBanner />
 
@@ -226,7 +258,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       </section>
 
       <AdBanner position="bottom" />
-    </div>
+      </div>
+    </>
   );
 }
 
