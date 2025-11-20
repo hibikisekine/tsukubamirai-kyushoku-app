@@ -175,26 +175,20 @@ export default async function DatePage({ params, searchParams }: PageProps) {
               🛒 Amazonで見る
             </AffiliateLink>
             {/* A8.netの商品リンク */}
-            {/* 環境変数 NEXT_PUBLIC_A8_AFFILIATE_ID が設定されていれば、通常のURLでも自動変換されます */}
-            {/* A8.netで商品リンクを生成したら、以下のコメントを外してURLを追加してください */}
-            {/* 
             <AffiliateLink
-              href="https://www.muji.com/jp/ja/store/cmdty/detail/商品番号"
-              affiliateType="a8"
-              title="ランチボックス"
+              href="https://px.a8.net/svt/ejp?a8mat=45ICTC+BNQM9E+4SVM+BXQOI"
+              title="ZIPTOP公式オンラインストア - ランチボックス"
               className="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold no-underline"
             >
-              🍱 ランチボックスを見る
+              🍱 ランチボックス・保存容器を見る
             </AffiliateLink>
             <AffiliateLink
-              href="https://www.thermos.jp/products/商品番号"
-              affiliateType="a8"
-              title="水筒"
+              href="https://px.a8.net/svt/ejp?a8mat=45ICTC+BNQM9E+4SVM+BWVTE"
+              title="ZIPTOP公式オンラインストア - 保存容器"
               className="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold no-underline"
             >
-              💧 水筒を見る
+              🥡 繰り返し使える保存容器
             </AffiliateLink>
-            */}
           </div>
         </div>
       </div>
