@@ -1,11 +1,22 @@
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay } from 'date-fns';
 import { ja } from 'date-fns/locale';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getKondateList } from '@/lib/data';
 import AdBanner from '@/components/AdBanner';
 
 // 動的レンダリングを強制（データが更新されたら即座に反映）
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'カレンダーで見る',
+  description: 'つくばみらい市の学校給食献立をカレンダー形式で確認できます。月ごとに献立を一覧表示。',
+  openGraph: {
+    title: '給食献立カレンダー | きゅうしょくなにかな',
+    description: 'つくばみらい市の学校給食献立をカレンダー形式で確認できます。月ごとに献立を一覧表示。',
+    type: 'website',
+  },
+};
 
 interface CalendarPageProps {
   searchParams: {

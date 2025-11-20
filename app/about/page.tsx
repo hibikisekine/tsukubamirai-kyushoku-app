@@ -1,5 +1,16 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import AdBanner from '@/components/AdBanner';
+
+export const metadata: Metadata = {
+  title: 'このアプリについて',
+  description: 'きゅうしょくなにかなは、つくばみらい市の学校給食献立を毎日確認できるアプリです。A献立とB献立に対応しています。',
+  openGraph: {
+    title: 'このアプリについて | きゅうしょくなにかな',
+    description: 'きゅうしょくなにかなは、つくばみらい市の学校給食献立を毎日確認できるアプリです。A献立とB献立に対応しています。',
+    type: 'website',
+  },
+};
 
 export default function AboutPage() {
   const aSchools = [

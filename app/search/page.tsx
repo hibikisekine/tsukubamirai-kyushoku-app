@@ -4,7 +4,12 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import AdBanner from '@/components/AdBanner';
+
+// メタデータはクライアントコンポーネントでは直接定義できないため、
+// layout.tsxまたは別のサーバーコンポーネントで定義する必要があります
+// ここではコメントとして残します
 
 interface Kondate {
   date: string;
@@ -35,80 +40,80 @@ export default function SearchPage() {
     fetchKondate();
   }, []);
 
-  // 検索実行
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    setLoading(true);
-
-    if (!query.trim()) {
+  // 検索処理
+  const handleSearch = () => {
+    if (!searchQuery.trim()) {
       setResults([]);
-      setLoading(false);
       return;
     }
 
-    // 検索ロジック（メニュー名、食材で検索）
+    setLoading(true);
+    const query = searchQuery.toLowerCase();
+    
     const filtered = allKondate.filter((kondate) => {
-      const searchLower = query.toLowerCase();
-      const menuLower = kondate.menu.toLowerCase();
-      const weekdayLower = kondate.weekday.toLowerCase();
-      
       return (
-        menuLower.includes(searchLower) ||
-        weekdayLower.includes(searchLower) ||
-        kondate.date.includes(query)
+        kondate.menu.toLowerCase().includes(query) ||
+        kondate.date.includes(query) ||
+        kondate.weekday.toLowerCase().includes(query)
       );
+    });
+
+    // 日付でソート（新しい順）
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateB.getTime() - dateA.getTime();
     });
 
     setResults(filtered);
     setLoading(false);
   };
 
+  // Enterキーで検索
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <header className="mb-8">
-        <Link
-          href="/"
-          className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-4"
-        >
-          ← トップに戻る
-        </Link>
         <h1 className="text-3xl font-bold text-primary-600 mb-2">
-          🔍 献立検索
+          🔍 献立を検索
         </h1>
         <p className="text-gray-600">
-          メニュー名、食材、日付などで検索できます
+          メニュー名、日付、曜日で検索できます
         </p>
       </header>
 
-      {/* 検索結果がある場合のみ広告を表示 */}
-      {(searchQuery && results.length > 0) && <AdBanner />}
+      <AdBanner />
 
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <div className="flex gap-4">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="flex gap-2">
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => {
-              const query = e.target.value;
-              handleSearch(query);
-            }}
-            placeholder="例: カレー、パン、2024-01-15"
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="例: カレー、2024-01-20、月曜日"
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
+          <button
+            onClick={handleSearch}
+            disabled={loading}
+            className="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-semibold disabled:opacity-50"
+          >
+            {loading ? '検索中...' : '検索'}
+          </button>
         </div>
-
-        {loading && (
-          <div className="mt-4 text-center text-gray-500">検索中...</div>
-        )}
-
-        {!loading && searchQuery && (
-          <div className="mt-4">
-            <p className="text-sm text-gray-600 mb-4">
-              {results.length}件の結果が見つかりました
-            </p>
-          </div>
-        )}
       </div>
+
+      {loading && (
+        <div className="text-center text-gray-500 py-8">
+          <p>検索中...</p>
+        </div>
+      )}
 
       <div className="space-y-4">
         {results.length > 0 ? (
@@ -157,4 +162,3 @@ export default function SearchPage() {
     </div>
   );
 }
-
