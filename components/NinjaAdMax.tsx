@@ -1,45 +1,48 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface NinjaAdMaxProps {
   position?: 'top' | 'bottom' | 'middle';
   className?: string;
-  scriptId?: string; // スクリプトID（オプション）
 }
 
 export default function NinjaAdMax({ 
   position = 'top', 
-  className = '',
-  scriptId
+  className = ''
 }: NinjaAdMaxProps) {
-  // スクリプトIDが指定されている場合はそれを使用、なければ環境変数から取得
-  const adMaxScriptId = scriptId || process.env.NEXT_PUBLIC_NINJA_ADMAX_SCRIPT_ID;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scriptLoadedRef = useRef(false);
+  
+  // 環境変数からスクリプトIDを取得
+  const adMaxScriptId = process.env.NEXT_PUBLIC_NINJA_ADMAX_SCRIPT_ID;
 
   useEffect(() => {
-    // 忍者AdMaxのスクリプトを読み込む
-    if (typeof window !== 'undefined' && adMaxScriptId) {
-      // 既に同じスクリプトが読み込まれているかチェック
-      const existingScript = document.getElementById(`ninja-admax-script-${position}`);
-      if (existingScript) {
-        return; // 既に読み込まれている場合は何もしない
-      }
-
-      const script = document.createElement('script');
-      script.src = `https://adm.shinobi.jp/s/${adMaxScriptId}`;
-      script.async = true;
-      script.id = `ninja-admax-script-${position}`;
-      document.head.appendChild(script);
-
-      return () => {
-        // クリーンアップ
-        const scriptToRemove = document.getElementById(`ninja-admax-script-${position}`);
-        if (scriptToRemove) {
-          scriptToRemove.remove();
-        }
-      };
+    // クライアントサイドでのみ実行
+    if (typeof window === 'undefined' || !adMaxScriptId || scriptLoadedRef.current) {
+      return;
     }
-  }, [adMaxScriptId, position]);
+
+    // 既にスクリプトが読み込まれているかチェック
+    const existingScript = document.querySelector(`script[src*="adm.shinobi.jp/s/${adMaxScriptId}"]`);
+    if (existingScript) {
+      scriptLoadedRef.current = true;
+      return;
+    }
+
+    // スクリプトを読み込む
+    const script = document.createElement('script');
+    script.src = `https://adm.shinobi.jp/s/${adMaxScriptId}`;
+    script.async = true;
+    script.onload = () => {
+      scriptLoadedRef.current = true;
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      // クリーンアップはしない（広告スクリプトは残しておく）
+    };
+  }, [adMaxScriptId]);
 
   if (!adMaxScriptId) {
     return (
@@ -57,11 +60,11 @@ export default function NinjaAdMax({
 
   return (
     <div className={`ad-container ${className}`} style={{ margin: '24px 0' }}>
-      <div className="w-full max-w-4xl mx-auto text-center">
-        {/* 忍者AdMaxの広告がここに表示されます */}
+      <div className="w-full max-w-4xl mx-auto text-center" ref={containerRef}>
+        {/* 忍者AdMaxの広告がここに自動的に表示されます */}
         <div
           id={`ninja-admax-${position}`}
-          style={{ minHeight: '100px' }}
+          style={{ minHeight: '100px', width: '100%' }}
         />
       </div>
     </div>
