@@ -4,6 +4,7 @@ import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 import AffiliateLink from '@/components/AffiliateLink';
+import NinjaAdMax from '@/components/NinjaAdMax';
 import LikeButton from '@/components/LikeButton';
 import { getKondateByDateBoth, KondateType } from '@/lib/data';
 
@@ -156,6 +157,9 @@ export default async function DatePage({ params, searchParams }: PageProps) {
           )}
         </div>
       )}
+
+      {/* 忍者AdMax広告 */}
+      <NinjaAdMax position="middle" />
 
       {/* アフィリエイトリンクセクション */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
