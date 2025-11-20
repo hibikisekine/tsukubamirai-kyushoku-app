@@ -80,9 +80,16 @@ export default function PrivacyPage() {
             5. 広告について
           </h2>
           <p className="text-gray-700 leading-relaxed mb-4">
-            本アプリでは、Google AdSenseなどの広告配信サービスを使用しています。
-            これらのサービスは、ユーザーの興味に基づいた広告を表示するためにCookieを使用する場合があります。
+            本アプリでは、以下の広告サービスを使用しています：
           </p>
+          <ul className="list-disc list-inside text-gray-700 space-y-2 mb-4">
+            <li>
+              <strong>Google AdSense</strong>: 広告配信サービス。ユーザーの興味に基づいた広告を表示するためにCookieを使用する場合があります。
+            </li>
+            <li>
+              <strong>アフィリエイトプログラム</strong>: Amazonアソシエイト、A8.netなどのアフィリエイトプログラムに参加しています。商品リンクをクリックして購入された場合、手数料が発生する場合があります。
+            </li>
+          </ul>
           <p className="text-gray-700 leading-relaxed mb-4">
             広告配信サービスのプライバシーポリシー：
           </p>
@@ -105,6 +112,26 @@ export default function PrivacyPage() {
                 className="text-primary-600 hover:text-primary-700 underline"
               >
                 Google 広告設定
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://affiliate.amazon.co.jp/help/operating/policies"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary-600 hover:text-primary-700 underline"
+              >
+                Amazonアソシエイト利用規約
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.a8.net/help/terms/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary-600 hover:text-primary-700 underline"
+              >
+                A8.net利用規約
               </a>
             </li>
           </ul>

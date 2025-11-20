@@ -166,6 +166,9 @@ export default async function DatePage({ params, searchParams }: PageProps) {
           <p className="text-gray-700">
             ランチボックスや水筒など、給食に便利なアイテムをチェック！
           </p>
+          <p className="text-xs text-gray-500 italic">
+            ※ 以下のリンクはアフィリエイトリンクです。購入時に手数料が発生する場合があります。
+          </p>
           <div className="flex flex-wrap gap-2">
             <AffiliateLink
               href="https://amzn.to/44d5r5t"

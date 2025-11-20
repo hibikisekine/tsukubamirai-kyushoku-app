@@ -64,11 +64,22 @@ export default function AffiliateLink({
     return url;
   };
 
+  // A8.netのリンクの場合はnofollowも追加
+  const getRelAttribute = () => {
+    const baseRel = 'noopener noreferrer sponsored';
+    const url = getAffiliateUrl(href);
+    // A8.netのリンクの場合はnofollowも追加
+    if (url.includes('px.a8.net') || url.includes('a8.net') || affiliateType === 'a8') {
+      return `${baseRel} nofollow`;
+    }
+    return baseRel;
+  };
+
   return (
     <a
       href={getAffiliateUrl(href)}
       target="_blank"
-      rel="noopener noreferrer sponsored"
+      rel={getRelAttribute()}
       className={`text-primary-600 hover:text-primary-700 underline ${className}`}
       title={title}
     >
