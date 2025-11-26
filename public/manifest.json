@@ -1,12 +1,16 @@
 {
-  "name": "きゅうしょくなにかな",
+  "name": "きゅうしょくなにかな | つくばみらい市給食献立",
   "short_name": "きゅうしょくなにかな",
-  "description": "つくばみらい市の給食献立を確認できるアプリ",
+  "description": "つくばみらい市の学校給食献立を毎日確認できるアプリ。今日と明日の献立を簡単にチェックできます。",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#f97316",
   "orientation": "portrait",
+  "categories": ["food", "education", "lifestyle"],
+  "lang": "ja",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -19,6 +23,33 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "今日の献立",
+      "short_name": "今日",
+      "description": "今日の給食献立を確認",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "カレンダー",
+      "short_name": "カレンダー",
+      "description": "給食献立カレンダーを表示",
+      "url": "/calendar",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

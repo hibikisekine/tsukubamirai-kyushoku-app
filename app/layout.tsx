@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Navigation from '@/components/Navigation';
+import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 
 export const metadata: Metadata = {
   title: {
@@ -67,6 +68,13 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#f97316" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="きゅうしょくなにかな" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
         {/* Google AdSense（環境変数から取得） */}
         {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
           <script
@@ -79,6 +87,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100">
         <Navigation />
         <main className="min-h-screen pb-8">{children}</main>
+        <PWAInstallPrompt />
         <footer className="bg-white border-t border-gray-200 py-6 mt-8">
           <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
             <p>© 2024 つくばみらい市給食献立アプリ</p>

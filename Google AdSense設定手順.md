@@ -177,3 +177,4 @@ data-ad-slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID || "1234567890"}
 - [AdSenseヘルプセンター](https://support.google.com/adsense/)
 - [AdSenseポリシー](https://support.google.com/adsense/answer/48182)
 
+

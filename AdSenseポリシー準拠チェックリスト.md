@@ -104,3 +104,4 @@ Google AdSenseは以下の点を確認します：
 - [質の高いサイトを作成するためのヒント（パート2）](https://support.google.com/webmasters/answer/66356)
 - [ウェブマスター向けの品質に関するガイドライン](https://support.google.com/webmasters/answer/35769)
 
+
