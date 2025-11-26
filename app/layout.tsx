@@ -74,7 +74,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="きゅうしょくなにかな" />
-        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png?v=2" />
         {/* Google AdSense（環境変数から取得） */}
         {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
           <script
