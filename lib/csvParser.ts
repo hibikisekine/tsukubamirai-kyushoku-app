@@ -38,6 +38,19 @@ export function parseCSV(csvContent: string): CSVParseResult {
       return { success: false, errors };
     }
 
+    // 最初に、CSVファイル全体をスキャンして年を推測
+    let defaultYear = '2025'; // デフォルト年
+    for (const row of result.data) {
+      const dateValue = (row['日付'] || row['date'] || '').trim();
+      if (dateValue.includes('/')) {
+        const parts = dateValue.split('/').map(p => p.trim()).filter(p => p.length > 0);
+        if (parts.length === 3 && parts[0].length === 4) {
+          defaultYear = parts[0];
+          break; // 最初に見つかった完全な日付から年を取得
+        }
+      }
+    }
+
     // データ行を処理
     result.data.forEach((row: any, index: number) => {
       try {
@@ -57,10 +70,11 @@ export function parseCSV(csvContent: string): CSVParseResult {
 
         // 日付の形式を正規化（YYYY-MM-DD形式に変換）
         let normalizedDate = dateValue.trim();
+        const originalDate = normalizedDate;
         
         // 様々な日付形式に対応
         if (normalizedDate.includes('/')) {
-          const parts = normalizedDate.split('/').map(p => p.trim());
+          const parts = normalizedDate.split('/').map(p => p.trim()).filter(p => p.length > 0);
           
           if (parts.length === 3) {
             // 年/月/日形式
@@ -86,18 +100,33 @@ export function parseCSV(csvContent: string): CSVParseResult {
             // 前の行の年を参照（可能な場合）
             if (kondateList.length > 0) {
               const lastDate = kondateList[kondateList.length - 1].date;
-              const lastYear = lastDate.substring(0, 4);
-              year = lastYear;
+              if (lastDate && lastDate.length >= 4) {
+                const lastYear = lastDate.substring(0, 4);
+                if (lastYear.match(/^\d{4}$/)) {
+                  year = lastYear;
+                }
+              }
             } else {
-              // 最初の行で年がない場合は、現在の年をデフォルトとして使用
-              const currentYear = new Date().getFullYear();
-              year = currentYear.toString();
+              // 最初の行で年がない場合は、デフォルト年を使用
+              year = defaultYear;
             }
             
             const month = parts[0].padStart(2, '0');
             const day = parts[1].padStart(2, '0');
             
+            // 月と日の妥当性チェック
+            const monthNum = parseInt(month, 10);
+            const dayNum = parseInt(day, 10);
+            if (monthNum < 1 || monthNum > 12) {
+              throw new Error(`無効な月: ${month}`);
+            }
+            if (dayNum < 1 || dayNum > 31) {
+              throw new Error(`無効な日: ${day}`);
+            }
+            
             normalizedDate = `${year}-${month}-${day}`;
+          } else {
+            throw new Error(`無効な日付形式: ${originalDate} (部分数: ${parts.length})`);
           }
         } else if (normalizedDate.match(/^\d{8}$/)) {
           // YYYYMMDD形式
@@ -105,6 +134,14 @@ export function parseCSV(csvContent: string): CSVParseResult {
           const month = normalizedDate.substring(4, 6);
           const day = normalizedDate.substring(6, 8);
           normalizedDate = `${year}-${month}-${day}`;
+        } else {
+          // その他の形式はエラー
+          throw new Error(`サポートされていない日付形式: ${originalDate}`);
+        }
+        
+        // 正規化後の日付がYYYY-MM-DD形式になっているか確認
+        if (!normalizedDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          throw new Error(`日付の正規化に失敗しました: ${originalDate} -> ${normalizedDate}`);
         }
 
         // 日付の妥当性チェック
