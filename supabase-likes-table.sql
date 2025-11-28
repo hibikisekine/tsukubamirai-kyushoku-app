@@ -27,3 +27,4 @@ CREATE TRIGGER update_kondate_likes_updated_at
 -- RLS（Row Level Security）を無効化（APIキーで制御）
 ALTER TABLE kondate_likes DISABLE ROW LEVEL SECURITY;
 
+

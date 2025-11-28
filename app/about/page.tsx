@@ -48,8 +48,12 @@ export default function AboutPage() {
         <h1 className="text-3xl font-bold text-primary-600 mb-2">
           「きゅうしょくなにかな」とは
         </h1>
+        <p className="text-gray-600">
+          つくばみらい市の学校給食献立を毎日確認できるアプリです。A献立とB献立に対応し、カレンダー表示や検索機能もご利用いただけます。
+        </p>
       </header>
 
+      {/* Aboutページは有用なコンテンツがあるため広告を表示 */}
       <AdBanner />
 
       <div className="bg-white rounded-lg shadow-md p-8 mb-6">

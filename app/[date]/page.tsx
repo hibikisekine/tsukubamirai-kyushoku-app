@@ -117,7 +117,8 @@ export default async function DatePage({ params, searchParams }: PageProps) {
         </div>
       </header>
 
-      <AdBanner />
+      {/* 献立データがある場合のみ広告を表示 */}
+      {kondate && <AdBanner />}
 
       {kondate ? (
         <>
@@ -172,24 +173,58 @@ export default async function DatePage({ params, searchParams }: PageProps) {
           )}
         </>
       ) : (
-        <div className="bg-white rounded-lg shadow-md p-8 mb-6 text-center text-gray-500">
-          <p>{selectedType}献立のデータがありません</p>
-          {selectedType === 'A' && kondateB && (
-            <Link
-              href={`/${date}?type=B`}
-              className="mt-4 inline-block text-primary-600 hover:text-primary-700 font-semibold"
-            >
-              B献立を見る →
-            </Link>
-          )}
-          {selectedType === 'B' && kondateA && (
-            <Link
-              href={`/${date}?type=A`}
-              className="mt-4 inline-block text-primary-600 hover:text-primary-700 font-semibold"
-            >
-              A献立を見る →
-            </Link>
-          )}
+        <div className="bg-white rounded-lg shadow-md p-8 mb-6">
+          <div className="text-center text-gray-500 mb-4">
+            <p className="text-lg font-semibold mb-2">{selectedType}献立のデータがありません</p>
+            <p className="text-sm text-gray-600 mb-4">
+              この日付の{selectedType}献立データは登録されていません。
+            </p>
+            {selectedType === 'A' && kondateB && (
+              <div className="mb-4">
+                <p className="text-sm text-gray-600 mb-2">B献立のデータはあります：</p>
+                <Link
+                  href={`/${date}?type=B`}
+                  className="inline-block px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-semibold"
+                >
+                  B献立を見る →
+                </Link>
+              </div>
+            )}
+            {selectedType === 'B' && kondateA && (
+              <div className="mb-4">
+                <p className="text-sm text-gray-600 mb-2">A献立のデータはあります：</p>
+                <Link
+                  href={`/${date}?type=A`}
+                  className="inline-block px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-semibold"
+                >
+                  A献立を見る →
+                </Link>
+              </div>
+            )}
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <p className="text-sm text-gray-600 mb-3">他のページもご利用ください：</p>
+              <div className="flex gap-2 justify-center flex-wrap">
+                <Link
+                  href="/"
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
+                >
+                  🏠 トップページ
+                </Link>
+                <Link
+                  href="/calendar"
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
+                >
+                  📅 カレンダー
+                </Link>
+                <Link
+                  href="/search"
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
+                >
+                  🔍 検索
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -218,7 +253,8 @@ export default async function DatePage({ params, searchParams }: PageProps) {
         </div>
       </div>
 
-      <AdBanner position="bottom" />
+      {/* 献立データがある場合のみ広告を表示 */}
+      {kondate && <AdBanner position="bottom" />}
     </div>
   );
 }

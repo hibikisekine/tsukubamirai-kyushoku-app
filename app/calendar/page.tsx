@@ -128,9 +128,18 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
         </div>
       </header>
 
+      {/* カレンダーページは有用なコンテンツがあるため広告を表示 */}
       <AdBanner />
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="mb-4 text-sm text-gray-600">
+          <p className="mb-2">
+            カレンダー形式で給食献立を確認できます。各日付をクリックすると詳細ページに移動します。
+          </p>
+          <p>
+            平日（月〜金）のみ表示されます。土日祝日は給食がないため表示されません。
+          </p>
+        </div>
         <div className="grid grid-cols-5 gap-2 sm:gap-3">
           {/* 曜日ヘッダー（平日のみ） */}
           {weekDays.map((day) => (

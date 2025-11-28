@@ -144,7 +144,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           </p>
         </header>
 
-      <AdBanner />
+      {/* 献立データがある場合のみ広告を表示 */}
+      {thisWeekKondate.length > 0 && <AdBanner />}
 
       {/* A/B献立の選択 */}
       {/* <div className="mb-6 flex justify-center">
@@ -236,7 +237,25 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             }).filter(Boolean)
           ) : (
             <div className="kondate-card text-center text-gray-500">
-              <p>今日と明日の献立データがありません</p>
+              <p className="mb-4">今日と明日の献立データがありません</p>
+              <div className="text-sm text-gray-600 space-y-2">
+                <p>献立データは通常、平日の給食日に更新されます。</p>
+                <p>カレンダーページや検索ページから過去の献立を確認できます。</p>
+                <div className="mt-4 flex gap-2 justify-center">
+                  <Link
+                    href="/calendar"
+                    className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm"
+                  >
+                    📅 カレンダーで見る
+                  </Link>
+                  <Link
+                    href="/search"
+                    className="px-4 py-2 bg-white text-primary-600 border-2 border-primary-500 rounded-lg hover:bg-primary-50 transition-colors text-sm"
+                  >
+                    🔍 献立を検索
+                  </Link>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -257,7 +276,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </Link>
       </section>
 
-      <AdBanner position="bottom" />
+      {/* 献立データがある場合のみ広告を表示 */}
+      {thisWeekKondate.length > 0 && <AdBanner position="bottom" />}
       </div>
     </>
   );

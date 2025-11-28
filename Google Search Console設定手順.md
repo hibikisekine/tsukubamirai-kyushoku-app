@@ -119,3 +119,4 @@ Google Search Consoleに登録して、サイトの検索エンジン最適化�
 4. **Core Web Vitalsを確認**
    - ページの読み込み速度とユーザー体験を確認
 
+

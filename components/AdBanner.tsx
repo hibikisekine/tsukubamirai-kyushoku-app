@@ -5,9 +5,14 @@ import React, { useEffect } from 'react';
 interface AdBannerProps {
   position?: 'top' | 'bottom' | 'middle';
   className?: string;
+  show?: boolean; // 広告を表示するかどうか（コンテンツがある場合のみ表示）
 }
 
-export default function AdBanner({ position = 'top', className = '' }: AdBannerProps) {
+export default function AdBanner({ position = 'top', className = '', show = true }: AdBannerProps) {
+  // 表示条件がfalseの場合は何も表示しない
+  if (!show) {
+    return null;
+  }
   const [clientId, setClientId] = React.useState<string | undefined>(undefined);
   const [adSlotId, setAdSlotId] = React.useState<string>("1234567890");
 

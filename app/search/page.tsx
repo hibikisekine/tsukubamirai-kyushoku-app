@@ -87,7 +87,8 @@ export default function SearchPage() {
         </p>
       </header>
 
-      <AdBanner />
+      {/* 検索結果がある場合のみ広告を表示 */}
+      {searchQuery && results.length > 0 && <AdBanner />}
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <div className="flex gap-2">
@@ -144,21 +145,73 @@ export default function SearchPage() {
             );
           })
         ) : searchQuery ? (
-          <div className="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">
-            <p>検索結果が見つかりませんでした</p>
-            <p className="text-sm mt-2">
+          <div className="bg-white rounded-lg shadow-md p-8 text-center">
+            <p className="text-lg font-semibold text-gray-700 mb-2">検索結果が見つかりませんでした</p>
+            <p className="text-sm text-gray-600 mb-4">
               別のキーワードで検索してみてください
             </p>
+            <div className="text-sm text-gray-600 space-y-1">
+              <p>💡 検索のヒント：</p>
+              <ul className="list-disc list-inside text-left max-w-md mx-auto space-y-1">
+                <li>メニュー名（例：カレー、ハンバーグ）</li>
+                <li>日付（例：2024-01-20）</li>
+                <li>曜日（例：月曜日）</li>
+              </ul>
+            </div>
+            <div className="mt-6">
+              <Link
+                href="/calendar"
+                className="inline-block px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm"
+              >
+                📅 カレンダーで見る
+              </Link>
+            </div>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">
-            <p>検索キーワードを入力してください</p>
+          <div className="bg-white rounded-lg shadow-md p-8">
+            <div className="text-center text-gray-500 mb-4">
+              <p className="text-lg font-semibold mb-2">検索キーワードを入力してください</p>
+              <p className="text-sm text-gray-600 mb-4">
+                メニュー名、日付、曜日で検索できます
+              </p>
+            </div>
+            <div className="bg-primary-50 rounded-lg p-6 border-2 border-primary-200">
+              <h3 className="font-semibold text-gray-800 mb-3">🔍 検索の使い方</h3>
+              <div className="text-sm text-gray-700 space-y-2 text-left">
+                <div>
+                  <p className="font-semibold">メニュー名で検索</p>
+                  <p className="text-gray-600">例：カレー、ハンバーグ、みそ汁</p>
+                </div>
+                <div>
+                  <p className="font-semibold">日付で検索</p>
+                  <p className="text-gray-600">例：2024-01-20、2024-01</p>
+                </div>
+                <div>
+                  <p className="font-semibold">曜日で検索</p>
+                  <p className="text-gray-600">例：月曜日、火曜日</p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 text-center">
+              <Link
+                href="/calendar"
+                className="inline-block px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm mr-2"
+              >
+                📅 カレンダーで見る
+              </Link>
+              <Link
+                href="/"
+                className="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
+              >
+                🏠 トップページ
+              </Link>
+            </div>
           </div>
         )}
       </div>
 
       {/* 検索結果がある場合のみ広告を表示 */}
-      {(searchQuery && results.length > 0) && <AdBanner position="bottom" />}
+      {searchQuery && results.length > 0 && <AdBanner position="bottom" />}
     </div>
   );
 }
