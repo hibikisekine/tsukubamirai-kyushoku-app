@@ -4,9 +4,31 @@
 現在の管理者パスワード（デフォルト値）:
 admin123
 
+本番環境（Netlify）の現在のパスワード:
+Kyushoku2024!Secure
+
 ※ 本番環境では必ず環境変数 ADMIN_PASSWORD を設定して、強力なパスワードに変更してください。
 
-設定方法:
+## 本番環境（Netlify）のパスワード確認方法
+
+1. Netlifyダッシュボードにログイン: https://app.netlify.com
+2. プロジェクトを選択
+3. 「Site settings」→「Environment variables」を開く
+4. `ADMIN_PASSWORD` の値を確認
+
+## パスワードをリセットする場合
+
+詳細は「管理者パスワードリセット手順.md」を参照してください。
+
+### 簡単な手順:
+1. Netlifyの「Site settings」→「Environment variables」を開く
+2. `ADMIN_PASSWORD` を編集または追加
+3. 新しいパスワードを設定（例: `Kyushoku2024!Secure`）
+4. 「Save」をクリック
+5. 「Deploys」タブで再デプロイを実行
+
+## ローカル開発環境の設定方法
+
 1. .env.local ファイルを作成
 2. 以下の行を追加:
    ADMIN_PASSWORD=your-strong-password-here

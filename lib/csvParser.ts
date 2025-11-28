@@ -60,8 +60,10 @@ export function parseCSV(csvContent: string): CSVParseResult {
         
         // 様々な日付形式に対応
         if (normalizedDate.includes('/')) {
-          const parts = normalizedDate.split('/');
+          const parts = normalizedDate.split('/').map(p => p.trim());
+          
           if (parts.length === 3) {
+            // 年/月/日形式
             let year = parts[0];
             const month = parts[1].padStart(2, '0');
             const day = parts[2].padStart(2, '0');
@@ -74,6 +76,26 @@ export function parseCSV(csvContent: string): CSVParseResult {
             } else {
               throw new Error(`無効な年: ${year}`);
             }
+            
+            normalizedDate = `${year}-${month}-${day}`;
+          } else if (parts.length === 2) {
+            // 月/日形式（年がない場合）
+            // 前の行の年を参照するか、現在の年をデフォルトとして使用
+            let year = '2025'; // デフォルト年（CSVファイルの他の行から推測）
+            
+            // 前の行の年を参照（可能な場合）
+            if (kondateList.length > 0) {
+              const lastDate = kondateList[kondateList.length - 1].date;
+              const lastYear = lastDate.substring(0, 4);
+              year = lastYear;
+            } else {
+              // 最初の行で年がない場合は、現在の年をデフォルトとして使用
+              const currentYear = new Date().getFullYear();
+              year = currentYear.toString();
+            }
+            
+            const month = parts[0].padStart(2, '0');
+            const day = parts[1].padStart(2, '0');
             
             normalizedDate = `${year}-${month}-${day}`;
           }
