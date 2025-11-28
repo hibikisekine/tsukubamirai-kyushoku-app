@@ -41,9 +41,10 @@ export function parseCSV(csvContent: string): CSVParseResult {
     // 最初に、CSVファイル全体をスキャンして年を推測
     let defaultYear = '2025'; // デフォルト年
     for (const row of result.data) {
-      const dateValue = (row['日付'] || row['date'] || '').trim();
+      const rowData = row as any;
+      const dateValue = (rowData['日付'] || rowData['date'] || '').trim();
       if (dateValue.includes('/')) {
-        const parts = dateValue.split('/').map(p => p.trim()).filter(p => p.length > 0);
+        const parts = dateValue.split('/').map((p: string) => p.trim()).filter((p: string) => p.length > 0);
         if (parts.length === 3 && parts[0].length === 4) {
           defaultYear = parts[0];
           break; // 最初に見つかった完全な日付から年を取得
@@ -74,7 +75,7 @@ export function parseCSV(csvContent: string): CSVParseResult {
         
         // 様々な日付形式に対応
         if (normalizedDate.includes('/')) {
-          const parts = normalizedDate.split('/').map(p => p.trim()).filter(p => p.length > 0);
+          const parts = normalizedDate.split('/').map((p: string) => p.trim()).filter((p: string) => p.length > 0);
           
           if (parts.length === 3) {
             // 年/月/日形式
