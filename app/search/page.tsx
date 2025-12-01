@@ -15,8 +15,46 @@ interface Kondate {
   date: string;
   weekday: string;
   menu: string;
+  type?: 'A' | 'B';
   notes?: string;
 }
+
+// 学校名と献立タイプのマッピング
+const schoolTypeMap: Record<string, 'A' | 'B'> = {
+  // A献立の学校
+  'わかくさ幼稚園': 'A',
+  'すみれ幼稚園': 'A',
+  '谷和原幼稚園': 'A',
+  '小絹小学校': 'A',
+  '伊奈東小学校': 'A',
+  '伊奈中学校': 'A',
+  '伊奈東中学校': 'A',
+  '谷和原中学校': 'A',
+  '小絹中学校': 'A',
+  // B献立の学校
+  '小張小学校': 'B',
+  '伊奈小学校': 'B',
+  '豊小学校': 'B',
+  '谷和原小学校': 'B',
+  '福岡小学校': 'B',
+  '陽光台小学校': 'B',
+  '富士見ヶ丘小学校': 'B',
+  // 部分一致用のキーワード
+  'わかくさ': 'A',
+  'すみれ': 'A',
+  '小絹': 'A',
+  '伊奈東': 'A',
+  '伊奈中': 'A',
+  '谷和原中': 'A',
+  '小張': 'B',
+  '伊奈小': 'B',
+  '豊小': 'B',
+  '谷和原小': 'B',
+  '福岡': 'B',
+  '陽光台': 'B',
+  '富士見ヶ丘': 'B',
+  '富士見': 'B',
+};
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,12 +87,29 @@ export default function SearchPage() {
 
     setLoading(true);
     const query = searchQuery.toLowerCase();
+    const queryOriginal = searchQuery.trim();
+    
+    // 学校名で検索する場合の献立タイプを特定
+    let targetType: 'A' | 'B' | null = null;
+    for (const [schoolName, type] of Object.entries(schoolTypeMap)) {
+      if (queryOriginal.includes(schoolName) || schoolName.toLowerCase().includes(query)) {
+        targetType = type;
+        break;
+      }
+    }
     
     const filtered = allKondate.filter((kondate) => {
+      // 学校名で検索している場合、献立タイプでフィルタリング
+      if (targetType && kondate.type !== targetType) {
+        return false;
+      }
+      
+      // 通常の検索（メニュー名、日付、曜日）
       return (
         kondate.menu.toLowerCase().includes(query) ||
         kondate.date.includes(query) ||
-        kondate.weekday.toLowerCase().includes(query)
+        kondate.weekday.toLowerCase().includes(query) ||
+        (kondate.type && kondate.type.toLowerCase() === query)
       );
     });
 
@@ -83,7 +138,7 @@ export default function SearchPage() {
           🔍 献立を検索
         </h1>
         <p className="text-gray-600">
-          メニュー名、日付、曜日で検索できます
+          メニュー名、日付、曜日、学校名で検索できます
         </p>
       </header>
 
@@ -97,7 +152,7 @@ export default function SearchPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="例: カレー、2024-01-20、月曜日"
+            placeholder="例: カレー、2024-01-20、月曜日、陽光台"
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
           <button
@@ -122,8 +177,8 @@ export default function SearchPage() {
             const kondateDate = new Date(kondate.date);
             return (
               <Link
-                key={kondate.date}
-                href={`/${kondate.date}`}
+                key={`${kondate.date}-${kondate.type || 'A'}`}
+                href={`/${kondate.date}${kondate.type ? `?type=${kondate.type}` : ''}`}
                 className="block kondate-card"
               >
                 <div className="flex justify-between items-start">
@@ -135,6 +190,15 @@ export default function SearchPage() {
                       <span className="text-sm text-gray-600">
                         ({kondate.weekday})
                       </span>
+                      {kondate.type && (
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                          kondate.type === 'A' 
+                            ? 'bg-primary-100 text-primary-700' 
+                            : 'bg-blue-100 text-blue-700'
+                        }`}>
+                          {kondate.type}献立
+                        </span>
+                      )}
                     </div>
                     <p className="text-gray-700 leading-relaxed">
                       {kondate.menu}
@@ -156,6 +220,7 @@ export default function SearchPage() {
                 <li>メニュー名（例：カレー、ハンバーグ）</li>
                 <li>日付（例：2024-01-20）</li>
                 <li>曜日（例：月曜日）</li>
+                <li>学校名（例：陽光台、小絹、伊奈）</li>
               </ul>
             </div>
             <div className="mt-6">
@@ -172,7 +237,7 @@ export default function SearchPage() {
             <div className="text-center text-gray-500 mb-4">
               <p className="text-lg font-semibold mb-2">検索キーワードを入力してください</p>
               <p className="text-sm text-gray-600 mb-4">
-                メニュー名、日付、曜日で検索できます
+                メニュー名、日付、曜日、学校名で検索できます
               </p>
             </div>
             <div className="bg-primary-50 rounded-lg p-6 border-2 border-primary-200">
@@ -189,6 +254,10 @@ export default function SearchPage() {
                 <div>
                   <p className="font-semibold">曜日で検索</p>
                   <p className="text-gray-600">例：月曜日、火曜日</p>
+                </div>
+                <div>
+                  <p className="font-semibold">学校名で検索</p>
+                  <p className="text-gray-600">例：陽光台、小絹、伊奈、つくばみらい市 陽光台</p>
                 </div>
               </div>
             </div>
