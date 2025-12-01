@@ -11,10 +11,14 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'カレンダーで見る',
   description: 'つくばみらい市の学校給食献立をカレンダー形式で確認できます。月ごとに献立を一覧表示。',
+  alternates: {
+    canonical: 'https://kyushoku.site/calendar',
+  },
   openGraph: {
     title: '給食献立カレンダー | きゅうしょくなにかな',
     description: 'つくばみらい市の学校給食献立をカレンダー形式で確認できます。月ごとに献立を一覧表示。',
     type: 'website',
+    url: 'https://kyushoku.site/calendar',
   },
 };
 

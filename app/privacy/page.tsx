@@ -4,6 +4,15 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'プライバシーポリシー',
   description: 'きゅうしょくなにかなのプライバシーポリシーです。',
+  alternates: {
+    canonical: 'https://kyushoku.site/privacy',
+  },
+  openGraph: {
+    title: 'プライバシーポリシー | きゅうしょくなにかな',
+    description: 'きゅうしょくなにかなのプライバシーポリシーです。',
+    type: 'website',
+    url: 'https://kyushoku.site/privacy',
+  },
 };
 
 export default function PrivacyPage() {

@@ -9,10 +9,14 @@ import { getKondateList, Kondate } from '@/lib/data';
 export const metadata: Metadata = {
   title: 'きゅうしょくなにかな',
   description: 'つくばみらい市の学校給食献立を毎日確認できるアプリ。今日と明日の献立を簡単にチェックできます。',
+  alternates: {
+    canonical: 'https://kyushoku.site/',
+  },
   openGraph: {
     title: 'きゅうしょくなにかな | つくばみらい市給食献立',
     description: 'つくばみらい市の学校給食献立を毎日確認できるアプリ。今日と明日の献立を簡単にチェックできます。',
     type: 'website',
+    url: 'https://kyushoku.site/',
   },
 };
 

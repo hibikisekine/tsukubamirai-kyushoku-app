@@ -5,10 +5,14 @@ import AdBanner from '@/components/AdBanner';
 export const metadata: Metadata = {
   title: 'このアプリについて',
   description: 'きゅうしょくなにかなは、つくばみらい市の学校給食献立を毎日確認できるアプリです。A献立とB献立に対応しています。',
+  alternates: {
+    canonical: 'https://kyushoku.site/about',
+  },
   openGraph: {
     title: 'このアプリについて | きゅうしょくなにかな',
     description: 'きゅうしょくなにかなは、つくばみらい市の学校給食献立を毎日確認できるアプリです。A献立とB献立に対応しています。',
     type: 'website',
+    url: 'https://kyushoku.site/about',
   },
 };
 

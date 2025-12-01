@@ -31,15 +31,20 @@ export async function generateMetadata({
   const formattedDate = format(dateObj, 'yyyy年M月d日(E)', { locale: ja });
   const menuPreview = kondate?.menu?.split('\n').slice(0, 2).join('、') || '給食献立';
 
+  const canonicalUrl = `https://kyushoku.site/${date}?type=${selectedType}`;
+
   return {
     title: `${formattedDate}の${selectedType}献立`,
     description: `${formattedDate}のつくばみらい市学校給食${selectedType}献立: ${menuPreview}`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: `${formattedDate}の${selectedType}献立 | きゅうしょくなにかな`,
       description: `${formattedDate}のつくばみらい市学校給食${selectedType}献立: ${menuPreview}`,
       type: 'article',
       publishedTime: date,
-      url: `https://kyushoku.site/${date}?type=${selectedType}`,
+      url: canonicalUrl,
     },
     twitter: {
       card: 'summary',

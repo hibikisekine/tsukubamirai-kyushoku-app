@@ -19,9 +19,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL('https://kyushoku.site'),
-  alternates: {
-    canonical: '/',
-  },
   openGraph: {
     type: 'website',
     locale: 'ja_JP',
