@@ -33,15 +33,26 @@ export async function generateMetadata({
 
   const canonicalUrl = `https://kyushoku.site/${date}?type=${selectedType}`;
 
+  // 学校名リスト（SEO用）
+  const aSchools = 'わかくさ幼稚園、すみれ幼稚園、谷和原幼稚園、小絹小学校、伊奈東小学校、伊奈中学校、伊奈東中学校、谷和原中学校、小絹中学校';
+  const bSchools = '小張小学校、伊奈小学校、豊小学校、谷和原小学校、福岡小学校、陽光台小学校、富士見ヶ丘小学校';
+  const schoolList = selectedType === 'A' ? aSchools : bSchools;
+
   return {
-    title: `${formattedDate}の${selectedType}献立`,
-    description: `${formattedDate}のつくばみらい市学校給食${selectedType}献立: ${menuPreview}`,
+    title: `${formattedDate}の${selectedType}献立 | つくばみらい市給食献立`,
+    description: `${formattedDate}のつくばみらい市学校給食${selectedType}献立（${schoolList}）: ${menuPreview}`,
+    keywords: [
+      `つくばみらい市 ${formattedDate} 給食`,
+      `つくばみらい市 ${formattedDate} 献立`,
+      `${selectedType}献立 ${formattedDate}`,
+      ...schoolList.split('、').map(school => `${school} 給食 ${formattedDate}`)
+    ],
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
       title: `${formattedDate}の${selectedType}献立 | きゅうしょくなにかな`,
-      description: `${formattedDate}のつくばみらい市学校給食${selectedType}献立: ${menuPreview}`,
+      description: `${formattedDate}のつくばみらい市学校給食${selectedType}献立（${schoolList}）: ${menuPreview}`,
       type: 'article',
       publishedTime: date,
       url: canonicalUrl,
@@ -85,8 +96,53 @@ export default async function DatePage({ params, searchParams }: PageProps) {
 
   const formattedDate = format(dateObj, 'yyyy年M月d日(E)', { locale: ja });
 
+  // 構造化データ（JSON-LD）に学校情報を追加
+  const aSchoolsList = [
+    'わかくさ幼稚園', 'すみれ幼稚園', '谷和原幼稚園', '小絹小学校', '伊奈東小学校',
+    '伊奈中学校', '伊奈東中学校', '谷和原中学校', '小絹中学校'
+  ];
+  const bSchoolsList = [
+    '小張小学校', '伊奈小学校', '豊小学校', '谷和原小学校',
+    '福岡小学校', '陽光台小学校', '富士見ヶ丘小学校'
+  ];
+  const schoolsForType = selectedType === 'A' ? aSchoolsList : bSchoolsList;
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${formattedDate}の${selectedType}献立`,
+    description: `${formattedDate}のつくばみらい市学校給食${selectedType}献立: ${kondate?.menu || '給食献立'}`,
+    datePublished: date,
+    dateModified: date,
+    author: {
+      '@type': 'Organization',
+      name: 'つくばみらい市教育委員会',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'きゅうしょくなにかな',
+      url: 'https://kyushoku.site',
+    },
+    about: schoolsForType.map(school => ({
+      '@type': 'EducationalOrganization',
+      name: school,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'つくばみらい市',
+        addressRegion: '茨城県',
+        addressCountry: 'JP',
+      },
+    })),
+    keywords: schoolsForType.map(school => `${school} 給食`).join(', '),
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
       <Link
         href="/"
         className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6"
@@ -260,6 +316,7 @@ export default async function DatePage({ params, searchParams }: PageProps) {
 
       {/* 献立データがある場合のみ広告を表示 */}
       {kondate && <AdBanner position="bottom" />}
-    </div>
+      </div>
+    </>
   );
 }
