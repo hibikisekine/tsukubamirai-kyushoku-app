@@ -28,3 +28,4 @@ CREATE TRIGGER update_kondate_likes_updated_at
 ALTER TABLE kondate_likes DISABLE ROW LEVEL SECURITY;
 
 
+

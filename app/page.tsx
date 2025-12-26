@@ -298,6 +298,29 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </Link>
       </section>
 
+      {/* サイトの説明と使い方 */}
+      <section className="mb-8 bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">
+          🍽️ きゅうしょくなにかなについて
+        </h2>
+        <div className="text-gray-700 space-y-3">
+          <p>
+            「きゅうしょくなにかな」は、つくばみらい市の学校給食献立を毎日確認できる無料のアプリです。
+            今日と明日の献立を簡単にチェックできるほか、カレンダー形式での確認や検索機能もご利用いただけます。
+          </p>
+          <div className="bg-primary-50 rounded-lg p-4 border-2 border-primary-200">
+            <h3 className="font-semibold text-primary-800 mb-2">✨ 主な機能</h3>
+            <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+              <li>今日と明日の給食献立を確認</li>
+              <li>カレンダー形式で月ごとの献立を一覧表示</li>
+              <li>メニュー名、日付、学校名で検索</li>
+              <li>A献立とB献立の両方に対応</li>
+              <li>スマートフォンでも快適にご利用いただけます</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* SEO用：学校名リスト */}
       <section className="mb-8 bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-semibold mb-4 text-gray-800">
@@ -323,6 +346,37 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <p className="mt-4 text-sm text-gray-600">
           「つくばみらい市 陽光台」「つくばみらい市 小絹」など、学校名で検索して給食献立を確認できます。
         </p>
+      </section>
+
+      {/* 給食についての情報 */}
+      <section className="mb-8 bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">
+          📖 つくばみらい市の給食について
+        </h2>
+        <div className="text-gray-700 space-y-3 text-sm">
+          <p>
+            つくばみらい市の学校給食は、栄養バランスの取れた食事を提供し、子どもたちの健康な成長をサポートしています。
+            給食だよりやレシピも公開されており、ご家庭でも給食メニューを再現できます。
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <a
+              href="https://www.city.tsukubamirai.lg.jp/edu-board/kyuushoku/page006623.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm"
+            >
+              📰 給食だよりを見る
+            </a>
+            <a
+              href="https://cookpad.com/search/つくばみらい市"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-white text-primary-600 border-2 border-primary-500 rounded-lg hover:bg-primary-50 transition-colors text-sm"
+            >
+              🍳 給食レシピを見る
+            </a>
+          </div>
+        </div>
       </section>
 
       {/* 献立データがある場合のみ広告を表示 */}

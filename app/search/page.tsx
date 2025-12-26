@@ -242,22 +242,26 @@ export default function SearchPage() {
             </div>
             <div className="bg-primary-50 rounded-lg p-6 border-2 border-primary-200">
               <h3 className="font-semibold text-gray-800 mb-3">🔍 検索の使い方</h3>
-              <div className="text-sm text-gray-700 space-y-2 text-left">
+              <div className="text-sm text-gray-700 space-y-3 text-left">
                 <div>
-                  <p className="font-semibold">メニュー名で検索</p>
-                  <p className="text-gray-600">例：カレー、ハンバーグ、みそ汁</p>
+                  <p className="font-semibold text-primary-700 mb-1">📝 メニュー名で検索</p>
+                  <p className="text-gray-600">例：カレー、ハンバーグ、みそ汁、サラダ</p>
+                  <p className="text-xs text-gray-500 mt-1">メニュー名の一部でも検索できます</p>
                 </div>
                 <div>
-                  <p className="font-semibold">日付で検索</p>
+                  <p className="font-semibold text-primary-700 mb-1">📅 日付で検索</p>
                   <p className="text-gray-600">例：2024-01-20、2024-01</p>
+                  <p className="text-xs text-gray-500 mt-1">年月だけでも検索できます</p>
                 </div>
                 <div>
-                  <p className="font-semibold">曜日で検索</p>
+                  <p className="font-semibold text-primary-700 mb-1">🗓️ 曜日で検索</p>
                   <p className="text-gray-600">例：月曜日、火曜日</p>
+                  <p className="text-xs text-gray-500 mt-1">特定の曜日の献立を確認できます</p>
                 </div>
                 <div>
-                  <p className="font-semibold">学校名で検索</p>
+                  <p className="font-semibold text-primary-700 mb-1">🏫 学校名で検索</p>
                   <p className="text-gray-600">例：陽光台、小絹、伊奈、つくばみらい市 陽光台</p>
+                  <p className="text-xs text-gray-500 mt-1">学校名で検索すると、その学校の献立タイプ（A/B）の献立が表示されます</p>
                 </div>
               </div>
             </div>

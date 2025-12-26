@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import AdBanner from '@/components/AdBanner';
 
 export const metadata: Metadata = {
   title: 'このアプリについて',
@@ -57,9 +56,7 @@ export default function AboutPage() {
         </p>
       </header>
 
-      {/* Aboutページは有用なコンテンツがあるため広告を表示 */}
-      <AdBanner />
-
+      {/* Aboutページはナビゲーションページのため広告を表示しない */}
       <div className="bg-white rounded-lg shadow-md p-8 mb-6">
         <p className="text-lg text-gray-700 leading-relaxed mb-6">
           このアプリはつくばみらい市が提供している献立情報をもとに情報を掲載しています。
@@ -173,8 +170,6 @@ export default function AboutPage() {
           </p>
         </div>
       </div>
-
-      <AdBanner position="bottom" />
     </div>
   );
 }

@@ -65,6 +65,12 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
     kondateList.map((k) => [`${k.date}_${k.type}`, k])
   );
   
+  // 現在の月に献立データがあるかチェック
+  const hasDataInCurrentMonth = filteredList.some((k) => {
+    const kondateDate = new Date(k.date);
+    return isSameMonth(kondateDate, targetDate);
+  });
+  
   // 前後の月のリンク
   const prevMonth = new Date(year, month - 1, 1);
   const nextMonth = new Date(year, month + 1, 1);
@@ -132,16 +138,21 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
         </div>
       </header>
 
-      {/* カレンダーページは有用なコンテンツがあるため広告を表示 */}
-      <AdBanner />
+      {/* 現在の月に献立データがある場合のみ広告を表示 */}
+      {hasDataInCurrentMonth && <AdBanner />}
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <div className="mb-4 text-sm text-gray-600">
-          <p className="mb-2">
-            カレンダー形式で給食献立を確認できます。各日付をクリックすると詳細ページに移動します。
+        <div className="mb-4 text-sm text-gray-600 space-y-2">
+          <p>
+            <strong className="text-gray-800">カレンダー形式で給食献立を確認できます。</strong>
+            各日付をクリックすると、その日の献立の詳細ページに移動します。
           </p>
           <p>
             平日（月〜金）のみ表示されます。土日祝日は給食がないため表示されません。
+          </p>
+          <p>
+            A献立とB献立を切り替えて、それぞれの学校の献立を確認できます。
+            月ごとに前後の月に移動して、過去や未来の献立も確認できます。
           </p>
         </div>
         <div className="grid grid-cols-5 gap-2 sm:gap-3">
@@ -207,7 +218,8 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
         </div>
       </div>
 
-      <AdBanner position="bottom" />
+      {/* 現在の月に献立データがある場合のみ広告を表示 */}
+      {hasDataInCurrentMonth && <AdBanner position="bottom" />}
     </div>
   );
 }
