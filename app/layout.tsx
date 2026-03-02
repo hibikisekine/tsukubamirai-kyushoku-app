@@ -122,6 +122,13 @@ export default function RootLayout({
               >
                 管理者ページ
               </a>
+              <span>|</span>
+              <a
+                href="/lp"
+                className="text-primary-600 hover:text-primary-700 font-semibold"
+              >
+                🏫 自治体・学校の方へ
+              </a>
             </div>
           </div>
         </footer>

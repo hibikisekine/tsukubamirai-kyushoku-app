@@ -170,7 +170,24 @@ export default function AboutPage() {
           </p>
         </div>
       </div>
+
+      <div className="bg-gradient-to-br from-orange-500 to-orange-400 rounded-2xl shadow-lg p-8 mb-6 text-white">
+        <h2 className="text-2xl font-bold mb-3">
+          🏫 他の自治体・学校でも導入できます
+        </h2>
+        <p className="leading-relaxed mb-6 text-orange-50">
+          「きゅうしょくなにかな」のシステムは、つくばみらい市以外の自治体・学校でもご利用いただけます。
+          PDFの献立表をスマホで見やすく変換し、保護者への情報提供をサポートします。
+        </p>
+        <Link
+          href="/lp"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-white text-orange-500 rounded-xl font-bold hover:bg-orange-50 transition-colors shadow"
+        >
+          <span>📋</span>
+          <span>導入について詳しく見る</span>
+          <span>→</span>
+        </Link>
+      </div>
     </div>
   );
 }
-
