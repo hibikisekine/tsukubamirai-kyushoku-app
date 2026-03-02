@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import type { Metadata } from "next";
 import "./lp.css";
 
 const googleFormUrl =
@@ -9,290 +8,289 @@ const googleFormUrl =
 
 export default function LandingPage() {
     useEffect(() => {
-        // Smooth scrolling for anchor links
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
             anchor.addEventListener("click", function (e) {
                 const targetHref = anchor.getAttribute("href");
-                if (
-                    !targetHref ||
-                    targetHref === "#" ||
-                    targetHref.startsWith("http") ||
-                    targetHref.startsWith("mailto")
-                )
-                    return;
+                if (!targetHref || targetHref === "#") return;
                 e.preventDefault();
-                const targetElement = document.querySelector(targetHref);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: "smooth" });
-                }
+                const el = document.querySelector(targetHref);
+                if (el) el.scrollIntoView({ behavior: "smooth" });
             });
         });
 
-        // Navbar scroll behavior
+        // Navbar scroll
         const navbar = document.getElementById("lp-navbar");
         const handleScroll = () => {
-            if (window.scrollY > 50) {
-                navbar?.classList.add("scrolled");
-            } else {
-                navbar?.classList.remove("scrolled");
-            }
+            if (window.scrollY > 50) navbar?.classList.add("scrolled");
+            else navbar?.classList.remove("scrolled");
 
-            // Reveal effect
-            const revealElements = document.querySelectorAll(
-                ".about-card, .feature-content, .step-item"
-            );
-            const windowHeight = window.innerHeight;
-            revealElements.forEach((el) => {
-                const elementTop = el.getBoundingClientRect().top;
-                if (elementTop < windowHeight - 100) {
-                    (el as HTMLElement).style.opacity = "1";
-                    (el as HTMLElement).style.transform = "translateY(0)";
+            // Reveal
+            document.querySelectorAll(".reveal").forEach((el) => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 80) {
+                    el.classList.add("visible");
                 }
             });
         };
 
-        // Initial setup for reveal
-        const revealElements = document.querySelectorAll(
-            ".about-card, .feature-content, .step-item"
-        );
-        revealElements.forEach((el) => {
-            (el as HTMLElement).style.opacity = "0";
-            (el as HTMLElement).style.transform = "translateY(30px)";
-            (el as HTMLElement).style.transition = "all 0.6s ease-out";
+        // Mobile menu
+        const mobileMenu = document.getElementById("lp-mobile-menu");
+        const navLinks = document.querySelector("#lp-navbar .nav-links") as HTMLElement | null;
+        mobileMenu?.addEventListener("click", () => {
+            navLinks?.classList.toggle("open");
         });
 
-        // Mobile menu toggle
-        const mobileMenu = document.getElementById("lp-mobile-menu");
-        const navLinks = document.querySelector(".lp-body .nav-links");
-        mobileMenu?.addEventListener("click", () => {
-            navLinks?.classList.toggle("active");
+        // FAQ accordion
+        document.querySelectorAll(".faq-question").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const item = btn.closest(".faq-item");
+                item?.classList.toggle("open");
+            });
         });
 
         window.addEventListener("scroll", handleScroll);
         handleScroll();
-
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    const faqs = [
+        {
+            q: "導入するには何が必要ですか？",
+            a: "自治体様で献立をインターネット上に公開されていれば、そのデータを元にアプリにデータを連携します。インターネット上にデータがない場合でも、ご相談いただければ対応いたします。",
+        },
+        {
+            q: "専門の知識がなく不安です",
+            a: "データの入稿もこちらで行いますので問題ありません。自治体様はQRコードやURLを学校にお知らせいただくだけで運用開始できます。",
+        },
+        {
+            q: "アプリのインストールは必要ですか？",
+            a: "不要です。スマートフォンやタブレットがあればご覧いただけます。また、広告は表示しませんので学校支給のタブレット等でも安心してご利用いただけます。",
+        },
+        {
+            q: "デモを見ることはできますか？",
+            a: "はい、可能です。オンラインでのご説明や、ご担当者様への説明の時間をいただければと思います。お問い合わせからご連絡ください。",
+        },
+        {
+            q: "1つの自治体に複数の給食センターがあり、献立が異なる場合も対応できますか？",
+            a: "可能です。例えばA地区・B地区などわけて表示することができます。",
+        },
+        {
+            q: "広告は表示されますか？",
+            a: "「きゅうしょくなにかな」のアプリ／Webサイトに広告は表示いたしません。お子さまでも安心してご覧いただけます。",
+        },
+    ];
 
     return (
         <div className="lp-body">
             {/* Navbar */}
             <nav id="lp-navbar">
-                <div className="container nav-content">
-                    <div className="logo">
-                        <span className="icon">🍱</span>
-                        <span className="text">きゅうしょくなにかな</span>
+                <div className="lp-container lp-nav-content">
+                    <div className="lp-logo">
+                        <span>🍱</span>
+                        <span>きゅうしょくなにかな</span>
                     </div>
                     <ul className="nav-links">
+                        <li><a href="#lp-features">サービス特徴</a></li>
+                        <li><a href="#lp-faq">よくある質問</a></li>
+                        <li><a href="#lp-pricing">料金</a></li>
                         <li>
-                            <a href="#lp-about">サービスについて</a>
-                        </li>
-                        <li>
-                            <a href="#lp-features">機能</a>
-                        </li>
-                        <li>
-                            <a href="#lp-howto">使い方</a>
-                        </li>
-                        <li>
-                            <a
-                                href={googleFormUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn-primary-sm"
-                            >
+                            <a href={googleFormUrl} target="_blank" rel="noopener noreferrer" className="lp-btn-sm">
                                 お問い合わせ
                             </a>
                         </li>
                     </ul>
-                    <div className="menu-toggle" id="lp-mobile-menu">
-                        <span className="bar"></span>
-                        <span className="bar"></span>
-                        <span className="bar"></span>
-                    </div>
+                    <button className="lp-hamburger" id="lp-mobile-menu" aria-label="メニュー">
+                        <span /><span /><span />
+                    </button>
                 </div>
             </nav>
 
-            {/* Hero Section */}
-            <header id="lp-hero">
-                <div className="container hero-grid">
-                    <div className="hero-text">
-                        <h1 className="fade-in">
-                            今日の給食、
-                            <br />
-                            <span className="highlight">なにかな？</span>
-                        </h1>
-                        <p className="subtitle fade-in-delay">
-                            「PDFが見づらい」「献立表をなくした」
-                            <br />
-                            そんな悩みを解決。スマホでサクッと給食チェック。
-                        </p>
-                        <div className="hero-btns fade-in-delay-2">
-                            <a href="#lp-about" className="btn-primary">
-                                詳しく知る
-                            </a>
-                            <a
-                                href={googleFormUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn-secondary"
-                            >
-                                導入のお問い合わせ
-                            </a>
-                        </div>
+            {/* Hero */}
+            <section className="lp-hero">
+                <div className="lp-container">
+                    <div className="lp-hero-badge">自治体・学校向けサービス</div>
+                    <h1 className="lp-hero-title">
+                        おまかせ運用で
+                        <br />
+                        <span className="lp-accent">自治体の給食献立を</span>
+                        <br />
+                        アプリ化。
+                    </h1>
+                    <p className="lp-hero-sub">
+                        自治体様の面倒な作業はゼロ。すべておまかせで献立のペーパーレスを実現し、
+                        <br className="pc-only" />
+                        SDGs推進にも貢献します。
+                    </p>
+                    <div className="lp-hero-btns">
+                        <a href={googleFormUrl} target="_blank" rel="noopener noreferrer" className="lp-btn-primary">
+                            無料でお問い合わせ
+                        </a>
+                        <a href="#lp-features" className="lp-btn-outline">
+                            サービス詳細を見る
+                        </a>
                     </div>
-                    <div className="hero-image-container fade-in">
-                        <img
-                            src="/lp-hero.png"
-                            alt="おいしい給食のイメージ"
-                            className="floating"
-                        />
-                        <div className="blob-bg"></div>
+                    <div className="lp-hero-stats">
+                        <div className="lp-stat">
+                            <span className="lp-stat-num">0</span>
+                            <span className="lp-stat-label">自治体側の作業コスト</span>
+                        </div>
+                        <div className="lp-stat-divider" />
+                        <div className="lp-stat">
+                            <span className="lp-stat-num">∞</span>
+                            <span className="lp-stat-label">対応できる学校・センター数</span>
+                        </div>
+                        <div className="lp-stat-divider" />
+                        <div className="lp-stat">
+                            <span className="lp-stat-num">広告なし</span>
+                            <span className="lp-stat-label">子どもたちも安心</span>
+                        </div>
                     </div>
                 </div>
-            </header>
+            </section>
 
-            {/* About Section */}
-            <section id="lp-about">
-                <div className="container">
-                    <div className="section-badge">ABOUT</div>
-                    <h2 className="section-title">給食の「困った」を解決します</h2>
-                    <div className="about-grid">
-                        <div className="about-card">
-                            <div className="card-icon">📄</div>
-                            <h3>PDFをデータ化して提供</h3>
+            {/* 3 Features */}
+            <section id="lp-features" className="lp-section lp-section-gray">
+                <div className="lp-container">
+                    <div className="lp-section-header">
+                        <span className="lp-section-badge">SERVICE</span>
+                        <h2 className="lp-section-title">選ばれる3つの理由</h2>
+                    </div>
+                    <div className="lp-features-grid">
+                        {/* 01 */}
+                        <div className="lp-feature-card reveal">
+                            <div className="lp-feature-num">01</div>
+                            <div className="lp-feature-icon">🤝</div>
+                            <h3>おまかせ運用</h3>
                             <p>
-                                自治体が公開する献立PDFを抽出し、正確なデータとしてスマホ向けに配信。保護者の閲覧利便性を最大化します。
+                                自治体様の給食センターのメニューから連携します。
+                                役所や給食センターの皆様の負荷が増えることはありません。
+                            </p>
+                            <div className="lp-feature-note">
+                                ※定期的に（月1度）翌月の給食データを自治体様からご提供いただく必要があります
+                            </div>
+                        </div>
+                        {/* 02 */}
+                        <div className="lp-feature-card reveal">
+                            <div className="lp-feature-num">02</div>
+                            <div className="lp-feature-icon">🌱</div>
+                            <h3>SDGs推進</h3>
+                            <p>
+                                近年のSDGs推進で学校関連の配布物のペーパーレスは急務となっています。
+                                児童・保護者がSDGs意識を手軽に実感できます。
                             </p>
                         </div>
-                        <div className="about-card">
-                            <div className="card-icon">🤝</div>
-                            <h3>自治体・学校を支援</h3>
+                        {/* 03 */}
+                        <div className="lp-feature-card reveal">
+                            <div className="lp-feature-num">03</div>
+                            <div className="lp-feature-icon">🗺️</div>
+                            <h3>地区ごとの切り替えも簡単</h3>
                             <p>
-                                Webサイトへの掲載から配信までを一括サポート。担当者様の運用負荷を軽減し、より良い情報提供を実現します。
-                            </p>
-                        </div>
-                        <div className="about-card">
-                            <div className="card-icon">🍎</div>
-                            <h3>アレルギー・食育に貢献</h3>
-                            <p>
-                                見やすいUIでアレルギー情報の確認を容易に。家庭での食育を支え、学校と家庭の橋渡しを担います。
+                                給食センターが複数ある自治体でも面倒な作業はありません。
+                                献立データを公開している自治体様であればすぐに導入できます。
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section id="lp-features" className="bg-light">
-                <div className="container feature-row">
-                    <div className="feature-img">
-                        <div className="mockup-container">
-                            <img
-                                src="/lp-app-preview.png"
-                                alt="アプリのプレビュー画面"
-                                className="app-screenshot"
-                            />
-                        </div>
+            {/* Demo Preview */}
+            <section className="lp-section">
+                <div className="lp-container lp-demo-row">
+                    <div className="lp-demo-img reveal">
+                        <img src="/lp-app-preview.png" alt="きゅうしょくなにかな アプリ画面" />
                     </div>
-                    <div className="feature-content">
-                        <div className="section-badge">FEATURES</div>
-                        <h2 className="section-title">シンプル、だけど強力。</h2>
-                        <ul className="feature-list">
-                            <li>
-                                <strong>スマホで見やすいカード表示</strong>
-                                <p>
-                                    一目で今日のメニューがわかるデザイン。拡大・縮小の必要はありません。
-                                </p>
-                            </li>
-                            <li>
-                                <strong>PDFが自動でデータ化</strong>
-                                <p>
-                                    献立表をアップロードするだけで、AIが自動で読み取り。手入力の手間はゼロです。
-                                </p>
-                            </li>
-                            <li>
-                                <strong>家族で共有できる</strong>
-                                <p>
-                                    URLひとつで家族みんなと共有。今夜の献立相談もスムーズに。
-                                </p>
-                            </li>
+                    <div className="lp-demo-text reveal">
+                        <span className="lp-section-badge">APP</span>
+                        <h2 className="lp-section-title">実際のページをご覧ください</h2>
+                        <p>現在つくばみらい市で稼働中のライブデモをご確認いただけます。スマートフォンで見やすいシンプルなデザインで、保護者の方に喜ばれています。</p>
+                        <ul className="lp-check-list">
+                            <li>📱 スマホ・タブレット対応</li>
+                            <li>🚫 広告表示なし</li>
+                            <li>🔍 メニュー名での検索機能</li>
+                            <li>📅 カレンダー形式での月表示</li>
+                            <li>⚡ A献立・B献立の切り替え</li>
                         </ul>
+                        <a href="https://kyushoku.site" target="_blank" rel="noopener noreferrer" className="lp-btn-primary">
+                            デモサイトを見る →
+                        </a>
                     </div>
                 </div>
             </section>
 
-            {/* How To Section */}
-            <section id="lp-howto">
-                <div className="container text-center">
-                    <div className="section-badge">HOW TO USE</div>
-                    <h2 className="section-title">使い方はたったの3ステップ</h2>
-                    <div className="step-grid">
-                        <div className="step-item">
-                            <div className="step-num">01</div>
-                            <p>学校から配布される献立PDFを用意します。</p>
-                        </div>
-                        <div className="step-arrow">→</div>
-                        <div className="step-item">
-                            <div className="step-num">02</div>
-                            <p>ツールにPDFをアップロードします。</p>
-                        </div>
-                        <div className="step-arrow">→</div>
-                        <div className="step-item">
-                            <div className="step-num">03</div>
-                            <p>あなたのスマホが最新の献立表に早変わり！</p>
-                        </div>
+            {/* Pricing */}
+            <section id="lp-pricing" className="lp-section lp-section-gray">
+                <div className="lp-container">
+                    <div className="lp-section-header">
+                        <span className="lp-section-badge">PRICING</span>
+                        <h2 className="lp-section-title">料金について</h2>
+                    </div>
+                    <div className="lp-pricing-card reveal">
+                        <div className="lp-pricing-label">導入・月額費用</div>
+                        <div className="lp-pricing-value">お問い合わせください</div>
+                        <p className="lp-pricing-note">給食センター数（献立数）によって変動します。</p>
+                        <ul className="lp-pricing-includes">
+                            <li>✅ 月1回の献立データ更新作業費用を含む</li>
+                            <li>✅ 初期設定・導入サポート込み</li>
+                            <li>✅ 広告なしの安心環境</li>
+                            <li>✅ 複数センター・地区対応</li>
+                        </ul>
+                        <a href={googleFormUrl} target="_blank" rel="noopener noreferrer" className="lp-btn-primary">
+                            料金を問い合わせる
+                        </a>
                     </div>
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section id="lp-cta">
-                <div className="container cta-box">
+            {/* FAQ */}
+            <section id="lp-faq" className="lp-section">
+                <div className="lp-container">
+                    <div className="lp-section-header">
+                        <span className="lp-section-badge">FAQ</span>
+                        <h2 className="lp-section-title">よくあるご質問</h2>
+                    </div>
+                    <div className="lp-faq-list">
+                        {faqs.map((faq, i) => (
+                            <div className="faq-item reveal" key={i}>
+                                <button className="faq-question">
+                                    <span className="faq-q-label">Q</span>
+                                    <span>{faq.q}</span>
+                                    <span className="faq-arrow">▼</span>
+                                </button>
+                                <div className="faq-answer">
+                                    <span className="faq-a-label">A</span>
+                                    <p>{faq.a}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* CTA */}
+            <section className="lp-cta-section">
+                <div className="lp-container lp-cta-inner">
                     <h2>自治体のDXを、給食から。</h2>
-                    <p>システムの導入から運用まで、すべてお任せください。</p>
-                    <a
-                        href={googleFormUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-white"
-                    >
-                        導入の相談をする
+                    <p>導入のご相談・デモのご依頼は、お気軽にお問い合わせください。</p>
+                    <a href={googleFormUrl} target="_blank" rel="noopener noreferrer" className="lp-btn-white">
+                        無料でお問い合わせ
                     </a>
                 </div>
             </section>
 
             {/* Footer */}
-            <footer>
-                <div className="container">
-                    <div className="footer-content">
-                        <div className="logo">
-                            <span className="icon">🍱</span>
-                            <span className="text" style={{ color: "white" }}>
-                                きゅうしょくなにかな
-                            </span>
-                        </div>
-                        <ul className="footer-links">
-                            <li>
-                                <a href="/privacy">プライバシーポリシー</a>
-                            </li>
-                            <li>
-                                <a href="/terms">利用規約</a>
-                            </li>
-                            <li>
-                                <a
-                                    href={googleFormUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    お問い合わせ
-                                </a>
-                            </li>
-                        </ul>
+            <footer className="lp-footer">
+                <div className="lp-container lp-footer-inner">
+                    <div className="lp-logo lp-logo-white">
+                        <span>🍱</span>
+                        <span>きゅうしょくなにかな</span>
                     </div>
-                    <div className="copyright">
-                        © 2026 きゅうしょくなにかな Project. All rights reserved.
-                    </div>
+                    <ul className="lp-footer-links">
+                        <li><a href="/privacy">プライバシーポリシー</a></li>
+                        <li><a href="/terms">利用規約</a></li>
+                        <li><a href={googleFormUrl} target="_blank" rel="noopener noreferrer">お問い合わせ</a></li>
+                    </ul>
                 </div>
+                <p className="lp-copyright">© 2026 きゅうしょくなにかな Project. All rights reserved.</p>
             </footer>
         </div>
     );
