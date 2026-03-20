@@ -7,13 +7,14 @@ import {
   saveKondateListToSupabase,
 } from './supabase';
 
-export type KondateType = 'A' | 'B';
+export type KondateType = string; // 'A' | 'B' | 'すこやか豊里' | 'Aブロック' など
 
 export interface Kondate {
   date: string;
   weekday: string;
   menu: string;
-  type: KondateType; // A献立 or B献立
+  type: KondateType;
+  city: string; // 'つくばみらい市' | 'つくば市' | '守谷市' | '取手市' | '龍ケ崎市'
   notes?: string;
 }
 
@@ -30,30 +31,29 @@ function ensureDataFile() {
   }
 }
 
-// 献立リストを取得
-export async function getKondateList(): Promise<Kondate[]> {
+// 献立リストを取得（city でフィルタリング可能）
+export async function getKondateList(city?: string): Promise<Kondate[]> {
   // Supabaseが利用可能な場合はSupabaseから取得
   if (isSupabaseAvailable()) {
     try {
-      const data = await getKondateListFromSupabase();
-      console.log(`[getKondateList] Supabaseから ${data.length} 件のデータを取得`);
+      const data = await getKondateListFromSupabase(city);
+      console.log(`[getKondateList] Supabaseから ${data.length} 件のデータを取得 (city=${city ?? 'all'})`);
       return data;
     } catch (error) {
       console.error('[getKondateList] Supabaseからの取得エラー:', error);
-      // エラーが発生しても空配列を返す（フォールバックしない）
       return [];
     }
   }
 
   console.log('[getKondateList] Supabaseが利用不可、ファイルシステムから取得');
-  // フォールバック: ファイルシステムから取得
   ensureDataFile();
   try {
     const fileContent = fs.readFileSync(dataFilePath, 'utf-8');
     const data = JSON.parse(fileContent);
-    const result = Array.isArray(data) ? data : [];
-    console.log(`[getKondateList] ファイルシステムから ${result.length} 件のデータを取得`);
-    return result;
+    const result: Kondate[] = Array.isArray(data) ? data : [];
+    const filtered = city ? result.filter((k) => k.city === city) : result;
+    console.log(`[getKondateList] ファイルシステムから ${filtered.length} 件のデータを取得`);
+    return filtered;
   } catch (error) {
     console.error('[getKondateList] ファイルシステムからの取得エラー:', error);
     return [];

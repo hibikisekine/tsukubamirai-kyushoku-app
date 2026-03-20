@@ -25,25 +25,27 @@ export const isSupabaseAvailable = () => {
   return supabase !== null && supabaseAdmin !== null;
 };
 
-// データベースから献立リストを取得
-export async function getKondateListFromSupabase(): Promise<Kondate[]> {
+// データベースから献立リストを取得（city でフィルタリング可能）
+export async function getKondateListFromSupabase(city?: string): Promise<Kondate[]> {
   if (!supabase) {
     console.error('[getKondateListFromSupabase] Supabase client is not initialized');
-    console.error('[getKondateListFromSupabase] URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-    console.error('[getKondateListFromSupabase] Anon Key:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'SET' : 'NOT SET');
     return [];
   }
 
   try {
-    console.log('[getKondateListFromSupabase] Supabaseからデータを取得中...');
-    const { data, error } = await supabase
+    let query = supabase
       .from('kondate')
       .select('*')
       .order('date', { ascending: true });
 
+    if (city) {
+      query = query.eq('city', city);
+    }
+
+    const { data, error } = await query;
+
     if (error) {
       console.error('[getKondateListFromSupabase] Supabaseエラー:', error);
-      console.error('[getKondateListFromSupabase] エラー詳細:', JSON.stringify(error, null, 2));
       return [];
     }
 
@@ -51,18 +53,15 @@ export async function getKondateListFromSupabase(): Promise<Kondate[]> {
       date: row.date,
       weekday: row.weekday,
       menu: row.menu,
-      type: row.type as 'A' | 'B',
+      type: row.type as string,
+      city: row.city || 'つくばみらい市',
       notes: row.notes || '',
     }));
-    
-    console.log(`[getKondateListFromSupabase] ${result.length} 件のデータを取得しました`);
+
+    console.log(`[getKondateListFromSupabase] ${result.length} 件取得 (city=${city ?? 'all'})`);
     return result;
   } catch (error) {
     console.error('[getKondateListFromSupabase] 例外エラー:', error);
-    if (error instanceof Error) {
-      console.error('[getKondateListFromSupabase] エラーメッセージ:', error.message);
-      console.error('[getKondateListFromSupabase] スタック:', error.stack);
-    }
     return [];
   }
 }
@@ -82,10 +81,11 @@ export async function saveKondateToSupabase(kondate: Kondate): Promise<void> {
           weekday: kondate.weekday,
           menu: kondate.menu,
           type: kondate.type,
+          city: kondate.city || 'つくばみらい市',
           notes: kondate.notes || '',
         },
         {
-          onConflict: 'date,type',
+          onConflict: 'city,date,type',
         }
       );
 
@@ -112,13 +112,14 @@ export async function saveKondateListToSupabase(
       weekday: k.weekday,
       menu: k.menu,
       type: k.type,
+      city: k.city || 'つくばみらい市',
       notes: k.notes || '',
     }));
 
     const { error } = await supabaseAdmin
       .from('kondate')
       .upsert(data, {
-        onConflict: 'date,type',
+        onConflict: 'city,date,type',
       });
 
     if (error) {

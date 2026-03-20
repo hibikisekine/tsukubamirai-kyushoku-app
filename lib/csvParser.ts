@@ -10,7 +10,7 @@ export interface CSVParseResult {
 /**
  * CSVファイルを解析して献立データに変換
  */
-export function parseCSV(csvContent: string): CSVParseResult {
+export function parseCSV(csvContent: string, city: string = 'つくばみらい市'): CSVParseResult {
   const errors: string[] = [];
   const kondateList: Kondate[] = [];
 
@@ -182,6 +182,7 @@ export function parseCSV(csvContent: string): CSVParseResult {
           weekday: weekdayValue.trim(),
           menu: menuTrimmed,
           type: typeValue as KondateType,
+          city,
           notes: (row['備考'] || row['notes'] || '').trim(),
         };
 

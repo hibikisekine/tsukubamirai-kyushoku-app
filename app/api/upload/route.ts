@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('file') as File;
     const defaultType = (formData.get('defaultType') as string) || 'A';
+    const city = (formData.get('city') as string) || 'つくばみらい市';
 
     if (!file) {
       return NextResponse.json(
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
     const csvContent = await file.text();
     
     // CSV解析
-    const parseResult = parseCSV(csvContent);
+    const parseResult = parseCSV(csvContent, city);
 
     if (!parseResult.success || !parseResult.data) {
       return NextResponse.json(
