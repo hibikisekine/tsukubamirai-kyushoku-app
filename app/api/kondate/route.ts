@@ -18,8 +18,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: true, data: kondate });
     }
 
-    // 全献立リストを取得
-    const kondateList = await getKondateList();
+    // 全献立リストを取得（cityフィルタ対応）
+    const city = searchParams.get('city') || undefined;
+    const kondateList = await getKondateList(city);
     return NextResponse.json({ success: true, data: kondateList });
   } catch (error: any) {
     console.error('API error:', error);

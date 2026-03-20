@@ -50,7 +50,7 @@ export async function getKondateListFromSupabase(city?: string): Promise<Kondate
     }
 
     const result = (data || []).map((row) => ({
-      date: row.date,
+      date: (row.date as string).replace(/\//g, '-'),
       weekday: row.weekday,
       menu: row.menu,
       type: row.type as string,
