@@ -72,7 +72,7 @@ export async function getKondateByDate(
   return kondateList.find((k) => k.date === date) || null;
 }
 
-// 日付でA/B両方の献立を取得
+// 日付でA/B両方の献立を取得（つくばみらい市レガシー用）
 export async function getKondateByDateBoth(
   date: string
 ): Promise<{ A: Kondate | null; B: Kondate | null }> {
@@ -80,6 +80,15 @@ export async function getKondateByDateBoth(
   const kondateA = kondateList.find((k) => k.date === date && k.type === 'A') || null;
   const kondateB = kondateList.find((k) => k.date === date && k.type === 'B') || null;
   return { A: kondateA, B: kondateB };
+}
+
+// 日付と市名で全センターの献立を取得
+export async function getKondateByDateAndCity(
+  date: string,
+  city: string
+): Promise<Kondate[]> {
+  const kondateList = await getKondateList(city);
+  return kondateList.filter((k) => k.date === date);
 }
 
 // 献立を追加・更新
