@@ -5,16 +5,15 @@ import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 
 export const metadata: Metadata = {
   title: {
-    default: 'きゅうしょくなにかな | つくばみらい市給食献立',
+    default: 'きゅうしょくなにかな | 茨城県給食献立',
     template: '%s | きゅうしょくなにかな',
   },
-  description: 'つくばみらい市の学校給食献立を毎日確認できるアプリ。陽光台小学校、小絹小学校、伊奈小学校、谷和原小学校など、つくばみらい市の全小中学校の給食献立を確認できます。今日と明日の献立を簡単にチェックできます。',
+  description: '茨城県つくば地域（つくばみらい市・つくば市・守谷市・取手市・龍ケ崎市）の学校給食献立を毎日確認できる無料サービス。カレンダー表示・キーワード検索にも対応。',
   keywords: [
-    '給食', '献立', 'つくばみらい市', '学校給食', 'きゅうしょく', '給食メニュー', '茨城県',
-    '陽光台小学校', '小絹小学校', '伊奈小学校', '谷和原小学校', '福岡小学校', '富士見ヶ丘小学校',
-    '小張小学校', '豊小学校', '伊奈東小学校', 'わかくさ幼稚園', 'すみれ幼稚園', '谷和原幼稚園',
-    '伊奈中学校', '伊奈東中学校', '谷和原中学校', '小絹中学校',
-    'つくばみらい市 陽光台', 'つくばみらい市 給食', 'つくばみらい市 献立'
+    '給食', '献立', '学校給食', 'きゅうしょく', '給食メニュー', '茨城県',
+    'つくばみらい市', 'つくば市', '守谷市', '取手市', '龍ケ崎市',
+    'つくばみらい市 給食', 'つくば市 給食', '守谷市 給食', '取手市 給食', '龍ケ崎市 給食',
+    '給食 献立', '今日の給食', '明日の給食', '給食カレンダー',
   ],
   authors: [{ name: 'きゅうしょくなにかな' }],
   creator: 'きゅうしょくなにかな',
@@ -93,41 +92,22 @@ export default function RootLayout({
         <PWAInstallPrompt />
         <footer className="bg-white border-t border-gray-200 py-6 mt-8">
           <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
-            <p>© 2024 つくばみらい市給食献立アプリ</p>
+            <p>© 2026 きゅうしょくなにかな</p>
             <div className="flex flex-wrap justify-center gap-2 mt-2">
-              <a
-                href="/about"
-                className="text-primary-600 hover:text-primary-700"
-              >
-                このアプリについて
+              <a href="/about" className="text-primary-600 hover:text-primary-700">
+                このサイトについて
               </a>
               <span>|</span>
-              <a
-                href="/privacy"
-                className="text-primary-600 hover:text-primary-700"
-              >
+              <a href="/privacy" className="text-primary-600 hover:text-primary-700">
                 プライバシーポリシー
               </a>
               <span>|</span>
-              <a
-                href="/terms"
-                className="text-primary-600 hover:text-primary-700"
-              >
+              <a href="/terms" className="text-primary-600 hover:text-primary-700">
                 利用規約
               </a>
               <span>|</span>
-              <a
-                href="/admin/upload"
-                className="text-primary-600 hover:text-primary-700"
-              >
-                管理者ページ
-              </a>
-              <span>|</span>
-              <a
-                href="/lp"
-                className="text-primary-600 hover:text-primary-700 font-semibold"
-              >
-                🏫 自治体・学校の方へ
+              <a href="/lp" className="text-primary-600 hover:text-primary-700">
+                自治体・学校の方へ
               </a>
             </div>
           </div>

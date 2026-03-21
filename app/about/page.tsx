@@ -75,6 +75,38 @@ export default function AboutPage() {
         </div>
       </div>
 
+      {/* 運営者情報 */}
+      <div className="bg-white rounded-lg shadow-md p-8 mb-6">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">🏠 運営者情報</h2>
+        <dl className="space-y-3 text-gray-700">
+          <div className="flex gap-4">
+            <dt className="font-semibold w-28 shrink-0">サイト名</dt>
+            <dd>きゅうしょくなにかな</dd>
+          </div>
+          <div className="flex gap-4">
+            <dt className="font-semibold w-28 shrink-0">運営者</dt>
+            <dd>個人（茨城県在住）</dd>
+          </div>
+          <div className="flex gap-4">
+            <dt className="font-semibold w-28 shrink-0">サイトURL</dt>
+            <dd>https://kyushoku.site</dd>
+          </div>
+          <div className="flex gap-4">
+            <dt className="font-semibold w-28 shrink-0">お問い合わせ</dt>
+            <dd>下記フォームよりお願いします</dd>
+          </div>
+          <div className="flex gap-4">
+            <dt className="font-semibold w-28 shrink-0">広告について</dt>
+            <dd>
+              当サイトはGoogle AdSenseを利用しています。
+              詳しくは
+              <Link href="/privacy" className="text-primary-600 hover:underline ml-1">プライバシーポリシー</Link>
+              をご確認ください。
+            </dd>
+          </div>
+        </dl>
+      </div>
+
       {/* 導入案内 */}
       <div className="bg-gradient-to-br from-orange-500 to-orange-400 rounded-2xl shadow-lg p-8 mb-6 text-white">
         <h2 className="text-2xl font-bold mb-3">
