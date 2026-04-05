@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Navigation from '@/components/Navigation';
 import PWAInstallPrompt from '@/components/PWAInstallPrompt';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: {
@@ -86,6 +87,19 @@ export default function RootLayout({
           />
         )}
       </head>
+      {/* Google Analytics */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-6K7NXBD8T9"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-6K7NXBD8T9');
+        `}
+      </Script>
       <body className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100">
         <Navigation />
         <main className="min-h-screen pb-8">{children}</main>
