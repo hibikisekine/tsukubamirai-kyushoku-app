@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { CITIES } from '@/lib/cities';
+import AmazonAffiliate from '@/components/AmazonAffiliate';
+import { aboutPageProducts } from '@/lib/affiliateProducts';
 
 export const metadata: Metadata = {
   title: 'このアプリについて | きゅうしょくなにかな',
@@ -52,6 +54,13 @@ export default function AboutPage() {
           ))}
         </div>
       </div>
+
+      {/* ▼ Amazonアフィリエイト追加 */}
+      <AmazonAffiliate
+        title="給食・食育関連のおすすめ本"
+        products={aboutPageProducts}
+      />
+      {/* ▲ 追加ここまで */}
 
       {/* フィードバック */}
       <div className="bg-white rounded-lg shadow-md p-8 mb-6">

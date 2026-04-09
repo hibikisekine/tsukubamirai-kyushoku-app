@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { CITIES } from '@/lib/cities';
+import AmazonAffiliate from '@/components/AmazonAffiliate';
+import { topPageProducts } from '@/lib/affiliateProducts';
 
 export const metadata: Metadata = {
   title: 'きゅうしょくなにかな | 茨城県給食献立アプリ',
@@ -49,6 +51,13 @@ export default function HomePage() {
           </Link>
         ))}
       </div>
+
+      {/* ▼ Amazonアフィリエイト追加 */}
+      <AmazonAffiliate
+        title="給食に便利なグッズ"
+        products={topPageProducts}
+      />
+      {/* ▲ 追加ここまで */}
 
       <footer className="mt-12 text-center text-xs text-gray-400 space-y-1">
         <p>給食献立データは各市の公式情報をもとに更新されます。</p>
