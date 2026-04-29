@@ -12,21 +12,6 @@ jobs:
     steps:
       - name: チェックアウト
         uses: actions/checkout@v4
-cat > .github/workflows/monthly-scraping.yml << 'EOF'
-name: 月次給食献立スクレイピング
-
-on:
-  schedule:
-    - cron: '0 0 1 * *'
-  workflow_dispatch:
-
-jobs:
-  scrape-and-upload:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: チェックアウト
-        uses: actions/checkout@v4
       
       - name: Python環境セットアップ
         uses: actions/setup-python@v5
