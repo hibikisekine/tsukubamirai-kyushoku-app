@@ -1,0 +1,56 @@
+name: 月次給食献立スクレイピング
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+jobs:
+  scrape-and-upload:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v4
+cat > .github/workflows/monthly-scraping.yml << 'EOF'
+name: 月次給食献立スクレイピング
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+jobs:
+  scrape-and-upload:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v4
+      
+      - name: Python環境セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: 依存パッケージインストール
+        run: |
+          pip install requests beautifulsoup4 pdfplumber
+      
+      - name: スクレイピング実行
+        run: |
+          python scripts/kyushoku_scraper.py
+      
+      - name: データをSupabaseにアップロード
+        env:
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: |
+          python scripts/upload_to_kyushoku.py
+      
+      - name: 実行結果を保存
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraping-output
+          path: scripts/kyushoku_output/
+          retention-days: 7
