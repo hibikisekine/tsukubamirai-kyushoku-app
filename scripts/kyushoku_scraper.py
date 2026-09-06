@@ -59,6 +59,79 @@ def save_csv(rows, filename):
 
 
 # ──────────────────────────────────────────
+# PDF年月バリデーション（古いPDFの誤取得を防ぐ）
+# ──────────────────────────────────────────
+
+_ZEN2HAN = str.maketrans("０１２３４５６７８９", "0123456789")
+_WNAMES = ["月", "火", "水", "木", "金", "土", "日"]
+
+
+def verify_pdf_period(pdf_bytes, year, month, *, label=""):
+    """
+    PDF1ページ目のテキストから対象年月を読み取り、要求 year/month と一致するか検証する。
+    - 別の年月だと判定できたら False（＝自治体が翌月分を未公開で、古いPDFを掴んでいる）
+    - 年月の手がかりが読めない場合は True（パーサ側の判断に委ねる）
+    """
+    try:
+        with pdfplumber.open(BytesIO(pdf_bytes)) as pdf:
+            text = (pdf.pages[0].extract_text() or "")
+    except Exception:
+        return True
+
+    text = text.translate(_ZEN2HAN)
+    reiwa = year - 2018
+
+    # 1) 令和N年M月（つくばみらい・取手・つくば など）
+    m = re.search(r"令和\s*(\d{1,2})\s*年\s*度?\s*(\d{1,2})\s*月", text)
+    if m:
+        ry, rm = int(m.group(1)), int(m.group(2))
+        if (ry, rm) != (reiwa, month):
+            print(f"    [SKIP] PDFの対象は令和{ry}年{rm}月（要求: 令和{reiwa}年{month}月）{('/ ' + label) if label else ''}")
+            return False
+        return True
+
+    # 2) 西暦YYYY年M月
+    m = re.search(r"(20\d{2})\s*年\s*(\d{1,2})\s*月", text)
+    if m:
+        gy, gm = int(m.group(1)), int(m.group(2))
+        if (gy, gm) != (year, month):
+            print(f"    [SKIP] PDFの対象は{gy}年{gm}月（要求: {year}年{month}月）{('/ ' + label) if label else ''}")
+            return False
+        return True
+
+    # 3) 年の記載がない（守谷「10月分」など）→ 月だけ緩く確認
+    m = re.search(r"(\d{1,2})\s*月分", text)
+    if m and int(m.group(1)) != month:
+        print(f"    [SKIP] PDFの対象は{int(m.group(1))}月（要求: {month}月）{('/ ' + label) if label else ''}")
+        return False
+    return True
+
+
+def weekday_matches_calendar(rows, year, month, *, min_check=3, label=""):
+    """
+    パース結果の weekday 表記が実カレンダーと整合するか検証する。
+    PDF由来の曜日があり、過半数がズレていたら False（＝別の年のPDFの疑い）。
+    ※ weekday を対象日から再計算するパーサ（つくばみらい市）では常に True になる。
+    """
+    checked = mismatch = 0
+    for r in rows:
+        wd = (r.get("weekday") or "").strip()
+        if wd not in _WNAMES:
+            continue
+        try:
+            actual = _WNAMES[dt.date(year, month, int(r["day"])).weekday()]
+        except (ValueError, KeyError, TypeError):
+            continue
+        checked += 1
+        if wd != actual:
+            mismatch += 1
+    if checked >= min_check and mismatch > checked / 2:
+        print(f"    [SKIP] 曜日がカレンダーと不一致 {mismatch}/{checked}（古い年のPDF？）{('/ ' + label) if label else ''}")
+        return False
+    return True
+
+
+# ──────────────────────────────────────────
 # テーブル形式PDFパーサー（つくば市向け）
 # ──────────────────────────────────────────
 
@@ -519,10 +592,11 @@ def scrape_tsukuba(year, month):
 
         print(f"    PDF: {pdf_url}")
         pdf_bytes = download_pdf(pdf_url)
-        if pdf_bytes:
+        if pdf_bytes and verify_pdf_period(pdf_bytes, year, month, label=center_name):
             rows = parse_pdf_table(pdf_bytes, "つくば市", center_name, year, month)
-            print(f"    抽出: {len(rows)}日分")
-            all_rows.extend(rows)
+            if weekday_matches_calendar(rows, year, month, label=center_name):
+                print(f"    抽出: {len(rows)}日分")
+                all_rows.extend(rows)
         time.sleep(1)
 
     save_csv(all_rows, f"つくば市_{year}年{month:02d}月.csv")
@@ -565,10 +639,11 @@ def scrape_moriya(year, month):
 
         print(f"    PDF: {pdf_url}")
         pdf_bytes = download_pdf(pdf_url)
-        if pdf_bytes:
+        if pdf_bytes and verify_pdf_period(pdf_bytes, year, month, label=f"{block}ブロック"):
             rows = parse_moriya_pdf(pdf_bytes, "守谷市", f"{block}ブロック", year, month)
-            print(f"    抽出: {len(rows)}日分")
-            all_rows.extend(rows)
+            if weekday_matches_calendar(rows, year, month, label=f"{block}ブロック"):
+                print(f"    抽出: {len(rows)}日分")
+                all_rows.extend(rows)
         time.sleep(1)
 
     save_csv(all_rows, f"守谷市_{year}年{month:02d}月.csv")
@@ -617,10 +692,11 @@ def scrape_toride(year, month):
 
         print(f"    PDF: {pdf_url}")
         pdf_bytes = download_pdf(pdf_url)
-        if pdf_bytes:
+        if pdf_bytes and verify_pdf_period(pdf_bytes, year, month, label=school_name):
             rows = parse_toride_pdf(pdf_bytes, "取手市", school_name, year, month)
-            print(f"    抽出: {len(rows)}日分")
-            all_rows.extend(rows)
+            if weekday_matches_calendar(rows, year, month, label=school_name):
+                print(f"    抽出: {len(rows)}日分")
+                all_rows.extend(rows)
         time.sleep(1)
 
     save_csv(all_rows, f"取手市_{year}年{month:02d}月.csv")
@@ -859,7 +935,7 @@ def scrape_tsukubamirai(year, month):
 
         print(f"      PDF: {pdf_url}")
         pdf_bytes = download_pdf(pdf_url)
-        if pdf_bytes:
+        if pdf_bytes and verify_pdf_period(pdf_bytes, year, month, label=center_name):
             rows = parse_tsukubamirai_pdf(pdf_bytes, "つくばみらい市", center_name, year, month)
             print(f"      抽出: {len(rows)}日分")
             all_rows.extend(rows)
